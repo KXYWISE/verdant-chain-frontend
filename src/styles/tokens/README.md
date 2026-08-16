@@ -3,14 +3,14 @@
 CSS custom properties that define the VerdAnt visual language (Material 3
 Expressive foundation, distinct agricultural identity).
 
-| File             | Tokens                                        |
-| ---------------- | --------------------------------------------- |
-| `color.css`      | Brand scale + semantic roles (light & dark)   |
-| `typography.css` | Type scale (display → label) and fonts        |
-| `spacing.css`    | 4px-base spacing scale                        |
-| `shape.css`      | Corner radii (incl. `--va-shape-2xl`)         |
-| `elevation.css`  | Shadow levels (theme-aware)                   |
-| `motion.css`     | Durations and easing curves                   |
+| File             | Tokens                                                                                   |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| `color.css`      | Brand scale + semantic roles (light & dark)                                              |
+| `typography.css` | Type scale (display → label) and fonts                                                   |
+| `spacing.css`    | 4px-base spacing scale                                                                   |
+| `shape.css`      | Corner radii (incl. `--va-shape-2xl`)                                                    |
+| `elevation.css`  | Shadow levels (theme-aware)                                                              |
+| `motion.css`     | Durations and easing curves                                                              |
 | `layout.css`     | Containers, breakpoints, container-query breakpoints (`--va-cq-*`), focus-ring, controls |
 
 ## Naming convention
