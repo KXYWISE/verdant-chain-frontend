@@ -1,0 +1,97 @@
+.card {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--va-space-6);
+}
+
+.loading,
+.empty,
+.error,
+.unregistered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--va-space-4);
+  text-align: center;
+  padding: var(--va-space-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-3);
+  margin-bottom: var(--va-space-6);
+}
+
+.idRow {
+  display: flex;
+  align-items: center;
+  gap: var(--va-space-3);
+}
+
+.farmerId {
+  font-family: var(--va-font-mono);
+  font-size: var(--va-type-label-md);
+  color: var(--va-on-surface-variant);
+}
+
+.address {
+  font-family: var(--va-font-mono);
+  font-size: var(--va-type-label-sm);
+  color: var(--va-on-surface-variant);
+  word-break: break-all;
+}
+
+.section {
+  margin-top: var(--va-space-6);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--va-space-4);
+  margin-top: var(--va-space-3);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-1);
+}
+
+.markers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--va-space-3);
+  margin-top: var(--va-space-3);
+}
+
+.marker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-1);
+  padding: var(--va-space-3);
+  background: var(--va-surface-container);
+  border-radius: var(--va-shape-md);
+  border: 1px solid var(--va-outline-variant);
+  min-width: 12rem;
+}
+
+.unregistered {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-3);
+  text-align: center;
+  padding: var(--va-space-6);
+}
+
+.walletPrompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-3);
+}
+
+.registerBtn {
+  width: 100%;
+  max-width: 20rem;
+}
