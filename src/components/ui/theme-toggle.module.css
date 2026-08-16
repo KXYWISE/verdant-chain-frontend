@@ -1,0 +1,21 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--va-control-min-target);
+  height: var(--va-control-min-target);
+  border: none;
+  background: var(--va-surface-container);
+  color: var(--va-on-surface);
+  border-radius: var(--va-shape-full);
+  cursor: pointer;
+  font-size: var(--va-type-title-sm);
+  transition:
+    background-color var(--va-motion-150) var(--va-ease-standard),
+    transform var(--va-motion-150) var(--va-ease-standard);
+}
+
+.toggle:hover {
+  background: var(--va-surface-container-high);
+  transform: rotate(20deg);
+}

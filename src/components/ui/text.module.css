@@ -1,0 +1,62 @@
+.root {
+  font-family: var(--va-font-sans);
+  color: var(--va-on-surface);
+  letter-spacing: var(--va-ls-title);
+}
+
+.body-lg {
+  font-size: var(--va-type-body-lg);
+  line-height: var(--va-lh-body);
+}
+
+.body-md {
+  font-size: var(--va-type-body-md);
+  line-height: var(--va-lh-body);
+}
+
+.body-sm {
+  font-size: var(--va-type-body-sm);
+  line-height: var(--va-lh-body);
+}
+
+.label-lg {
+  font-size: var(--va-type-label-lg);
+  line-height: var(--va-lh-label);
+  font-weight: 500;
+}
+
+.label-md {
+  font-size: var(--va-type-label-md);
+  line-height: var(--va-lh-label);
+  font-weight: 500;
+  letter-spacing: var(--va-ls-label);
+  text-transform: uppercase;
+}
+
+.label-sm {
+  font-size: var(--va-type-label-sm);
+  line-height: var(--va-lh-label);
+  font-weight: 500;
+  letter-spacing: var(--va-ls-label);
+  text-transform: uppercase;
+}
+
+.default {
+  color: var(--va-on-surface);
+}
+
+.muted {
+  color: var(--va-on-surface-variant);
+}
+
+.on-container {
+  color: var(--va-on-primary-container);
+}
+
+.error {
+  color: var(--va-error);
+}
+
+.success {
+  color: var(--va-success);
+}

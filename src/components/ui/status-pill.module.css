@@ -1,0 +1,44 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--va-space-2);
+  padding: var(--va-space-1) var(--va-space-3);
+  font-family: var(--va-font-sans);
+  font-size: var(--va-type-label-md);
+  font-weight: 600;
+  letter-spacing: var(--va-ls-label);
+  border-radius: var(--va-shape-full);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--va-shape-full);
+  background: currentColor;
+}
+
+.success {
+  background: var(--va-success-container);
+  color: var(--va-on-success-container);
+}
+
+.pending {
+  background: var(--va-warning-container);
+  color: var(--va-on-warning-container);
+}
+
+.error {
+  background: var(--va-error-container);
+  color: var(--va-on-error-container);
+}
+
+.info {
+  background: var(--va-info-container);
+  color: var(--va-on-info-container);
+}
+
+.neutral {
+  background: var(--va-surface-variant);
+  color: var(--va-on-surface-variant);
+}

@@ -1,0 +1,44 @@
+.root {
+  margin: 0;
+  font-family: var(--va-font-sans);
+  color: var(--va-on-surface);
+  font-weight: 600;
+  letter-spacing: var(--va-ls-title);
+}
+
+.h1 {
+  font-size: var(--va-type-display-sm);
+  line-height: var(--va-lh-display);
+  letter-spacing: var(--va-ls-display);
+  font-weight: 700;
+}
+
+.h2 {
+  font-size: var(--va-type-headline);
+  line-height: var(--va-lh-headline);
+  font-weight: 700;
+}
+
+.h3 {
+  font-size: var(--va-type-title-lg);
+  line-height: var(--va-lh-title);
+}
+
+.h4 {
+  font-size: var(--va-type-title-md);
+  line-height: var(--va-lh-title);
+}
+
+.h5 {
+  font-size: var(--va-type-title-sm);
+  line-height: var(--va-lh-title);
+  text-transform: uppercase;
+  letter-spacing: var(--va-ls-label);
+}
+
+.h6 {
+  font-size: var(--va-type-label-lg);
+  line-height: var(--va-lh-label);
+  text-transform: uppercase;
+  letter-spacing: var(--va-ls-label);
+}

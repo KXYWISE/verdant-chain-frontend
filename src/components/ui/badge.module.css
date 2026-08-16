@@ -1,0 +1,33 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--va-space-1);
+  padding: var(--va-space-1) var(--va-space-3);
+  font-family: var(--va-font-sans);
+  font-size: var(--va-type-label-md);
+  font-weight: 600;
+  letter-spacing: var(--va-ls-label);
+  border-radius: var(--va-shape-full);
+  background: var(--va-secondary-container);
+  color: var(--va-on-secondary-container);
+  white-space: nowrap;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: var(--va-type-body-lg);
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--va-shape-full);
+}
+
+.remove:hover {
+  background: color-mix(in srgb, var(--va-on-secondary-container) 14%, transparent);
+}

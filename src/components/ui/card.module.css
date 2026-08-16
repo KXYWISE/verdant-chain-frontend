@@ -1,0 +1,44 @@
+.root {
+  background: var(--va-surface-container);
+  color: var(--va-on-surface);
+  border-radius: var(--va-shape-xl);
+  border: 1px solid var(--va-outline-variant);
+}
+
+.interactive {
+  cursor: pointer;
+  transition:
+    box-shadow var(--va-motion-200) var(--va-ease-emphasized),
+    transform var(--va-motion-200) var(--va-ease-emphasized),
+    border-color var(--va-motion-200) var(--va-ease-standard);
+}
+
+.interactive:hover {
+  box-shadow: var(--va-elevation-2);
+  border-color: var(--va-primary);
+  transform: translateY(-2px);
+}
+
+.elevation0 {
+  box-shadow: var(--va-elevation-0);
+}
+
+.elevation1 {
+  box-shadow: var(--va-elevation-1);
+}
+
+.elevation2 {
+  box-shadow: var(--va-elevation-2);
+}
+
+.elevation3 {
+  box-shadow: var(--va-elevation-3);
+}
+
+.elevation4 {
+  box-shadow: var(--va-elevation-4);
+}
+
+.elevation5 {
+  box-shadow: var(--va-elevation-5);
+}
