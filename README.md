@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# verdant-frontend
 
-## Getting Started
+Frontend for **VerdAnt** — open agricultural technology & financial infrastructure
+built on Stellar/Soroban. See the coordination root
+[`/home/astro/drips2.0/INSTRUCTIONS.md`](../INSTRUCTIONS.md) for the master
+architecture.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) · React · TypeScript (strict)
+- Material 3 Expressive foundation with a distinct VerdAnt identity — see
+  [`src/styles/README.md`](src/styles/README.md) and the design-system route
+  (`/design-system`)
+- Plain CSS custom properties (design tokens) + CSS Modules; no utility CSS
+- Testing: Vitest + React Testing Library (unit/component), Playwright (E2E)
+
+## Ownership
+
+Owned by **Agent #3 (Frontend Engineer)**. Primary repository is `verdant-frontend`.
+Cross-repository interface contracts live in `docs/api/` at the coordination root;
+changes to interfaces require an agent note in `docs/agent-notes/`.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command                | Purpose                                         |
+| ---------------------- | ----------------------------------------------- |
+| `npm run dev`          | Development server                              |
+| `npm run build`        | Production build                                |
+| `npm run start`        | Serve production build                          |
+| `npm run lint`         | ESLint check                                    |
+| `npm run format`       | Prettier write                                  |
+| `npm run format:check` | Prettier check                                  |
+| `npm run typecheck`    | TypeScript check (`tsc --noEmit`)               |
+| `npm test`             | Vitest (unit/component) run                     |
+| `npm run test:watch`   | Vitest watch mode                               |
+| `npm run test:e2e`     | Playwright E2E (needs `npx playwright install`) |
 
-## Learn More
+## Directory layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/           # routes (App Router)
+├── components/
+│   └── ui/        # design-system primitives
+├── styles/
+│   ├── tokens/    # design tokens (CSS custom properties)
+│   └── ...
+├── lib/           # shared utilities
+└── test/          # test setup
+e2e/               # Playwright specs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Definition of Done
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Follows §16 of `INSTRUCTIONS.md`: meets documented interface contracts, includes
+tests, passes lint/format/typecheck, no secrets, reuses shared primitives,
+committed as small conventional changes.
