@@ -1,0 +1,71 @@
+.root {
+  display: grid;
+  align-items: stretch;
+  /* Base column count, overridden by each .colsN variant below */
+  --va-grid-cols: 1;
+}
+
+.cols1 {
+  --va-grid-cols: 1;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.cols2 {
+  --va-grid-cols: 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 {
+  --va-grid-cols: 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cols4 {
+  --va-grid-cols: 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cols6 {
+  --va-grid-cols: 6;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.cols12 {
+  --va-grid-cols: 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.gap2 {
+  gap: var(--va-space-2);
+}
+
+.gap3 {
+  gap: var(--va-space-3);
+}
+
+.gap4 {
+  gap: var(--va-space-4);
+}
+
+.gap5 {
+  gap: var(--va-space-5);
+}
+
+.gap6 {
+  gap: var(--va-space-6);
+}
+
+.gap8 {
+  gap: var(--va-space-8);
+}
+
+/* M3 Expressive responsive grid. Columns only ever grow as the containing
+   block widens (container queries); the requested base count is the floor. */
+.responsive {
+  @container (min-width: 36rem) {
+    grid-template-columns: repeat(max(var(--va-grid-cols), 4), minmax(0, 1fr));
+  }
+  @container (min-width: 48rem) {
+    grid-template-columns: repeat(max(var(--va-grid-cols), 6), minmax(0, 1fr));
+  }
+}

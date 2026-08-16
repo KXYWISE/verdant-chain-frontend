@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap1 {
+  gap: var(--va-space-1);
+}
+
+.gap2 {
+  gap: var(--va-space-2);
+}
+
+.gap3 {
+  gap: var(--va-space-3);
+}
+
+.gap4 {
+  gap: var(--va-space-4);
+}
+
+.gap5 {
+  gap: var(--va-space-5);
+}
+
+.gap6 {
+  gap: var(--va-space-6);
+}
+
+.gap8 {
+  gap: var(--va-space-8);
+}
+
+/* Container-query responsive direction: vertical by default, horizontal
+   once the containing block reaches --va-cq-md. Use inside a Container
+   with the `container` prop (or any `container-type: inline-size` element). */
+.responsive {
+  @container (min-width: 36rem) {
+    flex-direction: row;
+    align-items: center;
+  }
+}

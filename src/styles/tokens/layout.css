@@ -15,6 +15,13 @@
   --va-bp-lg: 1024px;
   --va-bp-xl: 1280px;
 
+  /* Container query breakpoints (px) — element-level responsiveness for
+     Stack/Grid/Card containers */
+  --va-cq-sm: 24rem;
+  --va-cq-md: 36rem;
+  --va-cq-lg: 48rem;
+  --va-cq-xl: 60rem;
+
   --va-focus-ring-width: 2px;
   --va-focus-ring-offset: 2px;
   --va-focus-ring-color: var(--va-primary);

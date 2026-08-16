@@ -1,0 +1,31 @@
+.root {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--va-space-4);
+}
+
+/* Fluid: grows with viewport between the sm and xl container widths */
+.fluid {
+  max-width: clamp(var(--va-container-sm), 88vw, var(--va-container-xl));
+}
+
+.sizeSm {
+  max-width: var(--va-container-sm);
+}
+
+.sizeMd {
+  max-width: var(--va-container-md);
+}
+
+.sizeLg {
+  max-width: var(--va-container-lg);
+}
+
+.sizeXl {
+  max-width: var(--va-container-xl);
+}
+
+/* Inline-size containment so child Stack/Grid/Card respond to this container */
+.context {
+  container-type: inline-size;
+}
