@@ -1,69 +1,62 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link"
+import { Button, Card, Heading, StatusPill, Text, ThemeToggle } from "@/components/ui"
+import styles from "./home.module.css"
+
+const pillars = [
+  { name: "AgriScout", blurb: "Farmer discovery, profiles, and agricultural reputation." },
+  { name: "AgroProof", blurb: "Verification along the harvest-to-buyer chain." },
+  { name: "AgriLease", blurb: "Equipment marketplace with escrowed bookings." },
+  { name: "FarmFund", blurb: "Milestone-based agricultural financing." },
+  { name: "LivestockPass", blurb: "Identity and history for livestock." },
+]
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className={styles.main}>
+      <div className={styles.topbar}>
+        <span className={styles.wordmark}>
+          <span className={styles.logo}>V</span>
+          <strong>VerdAnt</strong>
+        </span>
+        <nav className={styles.nav}>
+          <Link href="/design-system">Design system</Link>
+          <ThemeToggle />
+        </nav>
+      </div>
+
+      <section className={styles.hero}>
+        <StatusPill tone="success" label="Built on Stellar" />
+        <Heading as="h1" size={1}>
+          Agricultural infrastructure for a resilient food web.
+        </Heading>
+        <Text size="body-lg" tone="muted" as="p" className={styles.lede}>
+          VerdAnt is open-source technology and financial infrastructure for farmers — identity,
+          verification, leasing, and financing — anchored by Soroban smart contracts.
+        </Text>
+        <div className={styles.actions}>
+          <Button as="a" href="/design-system">
+            Explore the design system
+          </Button>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      <section className={styles.pillars} aria-label="Feature pillars">
+        {pillars.map((pillar) => (
+          <Card key={pillar.name} interactive className={styles.pillarCard}>
+            <Heading as="h3">{pillar.name}</Heading>
+            <Text as="p" tone="muted">
+              {pillar.blurb}
+            </Text>
+          </Card>
+        ))}
+      </section>
+
+      <footer className={styles.footer}>
+        <Text as="p" size="body-sm" tone="muted">
+          Foundation preview — the design system and shell. Feature surfaces arrive after API
+          contracts land in <code>docs/api/</code>.
+        </Text>
+      </footer>
+    </main>
+  )
 }
