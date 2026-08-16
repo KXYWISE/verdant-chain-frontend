@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Button, Card, Heading, StatusPill, Text, ThemeToggle } from "@/components/ui"
+import { Button, Card, Heading, StatusPill, Text, ThemeToggle, WalletButton } from "@/components/ui"
 import styles from "./home.module.css"
 
 const pillars = [
@@ -20,7 +20,8 @@ export default function Home() {
         </span>
         <nav className={styles.nav}>
           <Link href="/design-system">Design system</Link>
-          <ThemeToggle />
+          <Link href="/discover">AgriScout</Link>
+          <WalletButton />
         </nav>
       </div>
 
@@ -36,6 +37,9 @@ export default function Home() {
         <div className={styles.actions}>
           <Button as="a" href="/design-system">
             Explore the design system
+          </Button>
+          <Button as="a" variant="outlined" href="/discover">
+            Try AgriScout
           </Button>
         </div>
       </section>
