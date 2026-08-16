@@ -1,0 +1,70 @@
+.container {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--va-space-6);
+}
+
+.subtitle {
+  margin-top: var(--va-space-2);
+  margin-bottom: var(--va-space-6);
+}
+
+.form {
+  display: flex;
+  gap: var(--va-space-3);
+  margin-bottom: var(--va-space-6);
+}
+
+.spinner {
+  margin-top: var(--va-space-4);
+}
+
+.errorCard,
+.resultCard {
+  padding: var(--va-space-6);
+}
+
+.errorCard {
+  border-color: var(--va-error);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--va-space-3);
+  margin-bottom: var(--va-space-4);
+}
+
+.farmerId {
+  font-family: var(--va-font-mono);
+  font-size: var(--va-type-label-md);
+  color: var(--va-on-surface-variant);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-2);
+}
+
+.markers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--va-space-2);
+  margin-top: var(--va-space-3);
+}
+
+.future {
+  margin-top: var(--va-space-12);
+  padding-top: var(--va-space-8);
+  border-top: 1px solid var(--va-outline-variant);
+}
+
+.futureGrid {
+  margin-top: var(--va-space-4);
+}
+
+.note {
+  margin-top: var(--va-space-4);
+  font-size: var(--va-type-body-sm);
+}
