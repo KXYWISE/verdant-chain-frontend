@@ -1,0 +1,17 @@
+.connected {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--va-space-2);
+}
+
+.address {
+  font-family: var(--va-font-mono);
+  font-size: var(--va-type-label-md);
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--va-shape-full);
+  background: var(--va-success);
+}
