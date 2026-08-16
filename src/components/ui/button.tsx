@@ -13,6 +13,8 @@ type CommonProps = {
   loading?: boolean
   leadingIcon?: ReactNode
   trailingIcon?: ReactNode
+  /** Full-width inside narrow containers (container-query driven) */
+  block?: boolean
   children?: ReactNode
 }
 
@@ -31,13 +33,17 @@ export function Button(props: ButtonProps) {
 function classes({
   variant,
   size,
+  block,
   className,
 }: {
   variant: ButtonVariant
   size: ButtonSize
+  block?: boolean
   className?: string
 }) {
-  return `${styles.root} ${styles[variant]} ${styles[size]} ${className ?? ""}`
+  return `${styles.root} ${styles[variant]} ${styles[size]} ${block ? styles.block : ""} ${
+    className ?? ""
+  }`
 }
 
 function ButtonElement({
@@ -49,12 +55,13 @@ function ButtonElement({
   children,
   className,
   disabled,
+  block = false,
   ...props
 }: ButtonAsButton) {
   const isDisabled = disabled || loading
   return (
     <button
-      className={classes({ variant, size, className })}
+      className={classes({ variant, size, block, className })}
       disabled={isDisabled}
       aria-busy={loading || undefined}
       {...props}
@@ -74,10 +81,11 @@ function ButtonAnchor({
   trailingIcon,
   children,
   className,
+  block = false,
   ...props
 }: ButtonAsAnchor) {
   return (
-    <a className={classes({ variant, size, className })} {...props}>
+    <a className={classes({ variant, size, block, className })} {...props}>
       {loading ? <Spinner size="sm" /> : leadingIcon}
       {children}
       {!loading && trailingIcon}

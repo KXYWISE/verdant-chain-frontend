@@ -3,6 +3,23 @@
   color: var(--va-on-surface);
   border-radius: var(--va-shape-xl);
   border: 1px solid var(--va-outline-variant);
+  padding: var(--va-space-4);
+}
+
+/* Inline-size containment context for responsive card padding and children */
+.context {
+  container-type: inline-size;
+}
+
+/* M3 Expressive: card padding and radius grow with the container width */
+.context {
+  @container (min-width: 24rem) {
+    padding: var(--va-space-5);
+  }
+  @container (min-width: 36rem) {
+    padding: var(--va-space-6);
+    border-radius: var(--va-shape-2xl);
+  }
 }
 
 .interactive {

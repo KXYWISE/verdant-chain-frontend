@@ -5,9 +5,12 @@ import {
   Badge,
   Button,
   Card,
+  Container,
+  Grid,
   Heading,
   Input,
   Spinner,
+  Stack,
   StatusPill,
   Text,
   ThemeToggle,
@@ -168,6 +171,44 @@ export default function DesignSystemPage() {
             </Text>
           </div>
         </div>
+      </section>
+
+      <section aria-labelledby="responsive-heading">
+        <Heading as="h2" id="responsive-heading">
+          Responsive layout
+        </Heading>
+        <Text as="p" size="body-md" tone="muted">
+          Resize the window — these surfaces adapt to their container width via container queries,
+          not just the viewport.
+        </Text>
+
+        <Container container className={styles.responsiveFrame}>
+          <Stack responsive gap={4}>
+            <Card container className={styles.responsiveCard}>
+              <Heading as="h3">Container queries</Heading>
+              <Text as="p" size="body-sm" tone="muted">
+                This card&apos;s padding and radius grow with its container. Stack switches
+                direction at 36rem, Grid grows columns at 36rem/48rem.
+              </Text>
+            </Card>
+            <Button block>Primary action</Button>
+            <Button block variant="tonal">
+              Secondary action
+            </Button>
+          </Stack>
+
+          <Grid cols={2} gap={4} className={styles.responsiveGrid}>
+            {["North plot", "Greenhouse B", "Cattle pasture", "Irrigation zone"].map((name) => (
+              <Card key={name} container elevation={0}>
+                <StatusPill tone="success" label="Active" />
+                <Heading as="h3">{name}</Heading>
+                <Text as="p" size="body-sm" tone="muted">
+                  Grid item — expands from 2 to 6 columns as the container grows.
+                </Text>
+              </Card>
+            ))}
+          </Grid>
+        </Container>
       </section>
 
       <footer className={styles.footer}>

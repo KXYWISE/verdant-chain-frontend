@@ -75,3 +75,22 @@
 .footer {
   margin-top: var(--va-space-4);
 }
+
+.responsiveFrame {
+  margin-top: var(--va-space-4);
+  padding: var(--va-space-4);
+  border: 1px dashed var(--va-outline-variant);
+  border-radius: var(--va-shape-xl);
+  background: var(--va-surface-container-highest);
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-5);
+}
+
+.responsiveCard {
+  flex: 1;
+}
+
+.responsiveGrid {
+  margin-top: var(--va-space-2);
+}

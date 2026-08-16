@@ -28,4 +28,9 @@ describe("Button", () => {
     render(<Button disabled>Done</Button>)
     expect(screen.getByRole("button", { name: "Done" })).toBeDisabled()
   })
+
+  it("adds the block class for full-width layout", () => {
+    const { container } = render(<Button block>Wide</Button>)
+    expect(container.querySelector("button")).toHaveClass("block")
+  })
 })

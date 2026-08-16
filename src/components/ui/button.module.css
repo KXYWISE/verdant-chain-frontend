@@ -28,6 +28,14 @@
   transform: scale(0.98);
 }
 
+/* Full-width when the containing block is narrow (M3 adaptive controls) */
+.block {
+  width: 100%;
+  @container (min-width: 24rem) {
+    width: auto;
+  }
+}
+
 .sm {
   padding: var(--va-space-2) var(--va-space-4);
   font-size: var(--va-type-label-md);
