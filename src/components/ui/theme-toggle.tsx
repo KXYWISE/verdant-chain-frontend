@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useSyncExternalStore } from "react"
+import { getTheme, setTheme, subscribeTheme } from "@/lib/theme-store"
 import styles from "./theme-toggle.module.css"
 
 type ThemeToggleProps = {
@@ -8,18 +9,10 @@ type ThemeToggleProps = {
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") return "light"
-    const stored = window.localStorage.getItem("va-theme")
-    if (stored === "light" || stored === "dark") return stored
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-  })
+  const theme = useSyncExternalStore(subscribeTheme, getTheme, () => "light")
 
   function toggle() {
-    const next = theme === "dark" ? "light" : "dark"
-    setTheme(next)
-    document.documentElement.dataset.theme = next
-    window.localStorage.setItem("va-theme", next)
+    setTheme(theme === "dark" ? "light" : "dark")
   }
 
   return (
