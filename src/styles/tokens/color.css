@@ -1,0 +1,162 @@
+/*
+ * VerdAnt design tokens — semantic color system.
+ * Material 3 Expressive foundation with a distinct VerdAnt identity:
+ * agri-green primary, earth secondary, harvest amber tertiary, Stellar blue info.
+ * Dark mode is first-class: tokens flip via prefers-color-scheme or [data-theme].
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --va-brand-50: #f0f9f1;
+  --va-brand-100: #d7eeda;
+  --va-brand-200: #aeddb5;
+  --va-brand-300: #7cc488;
+  --va-brand-400: #4da75f;
+  --va-brand-500: #2e8a41;
+  --va-brand-600: #2e6b34;
+  --va-brand-700: #27582f;
+  --va-brand-800: #214a28;
+  --va-brand-900: #1b3d22;
+
+  /* Semantic roles — light */
+  --va-primary: #2e6b34;
+  --va-on-primary: #ffffff;
+  --va-primary-container: #b8f0bc;
+  --va-on-primary-container: #06220b;
+  --va-secondary: #6e5b36;
+  --va-on-secondary: #ffffff;
+  --va-secondary-container: #f2e2bb;
+  --va-on-secondary-container: #241a02;
+  --va-tertiary: #8a5a00;
+  --va-on-tertiary: #ffffff;
+  --va-tertiary-container: #ffdf9e;
+  --va-on-tertiary-container: #2b1900;
+  --va-info: #00639b;
+  --va-on-info: #ffffff;
+  --va-info-container: #d1e6ff;
+  --va-on-info-container: #001d33;
+  --va-error: #ba1a1a;
+  --va-on-error: #ffffff;
+  --va-error-container: #ffdad6;
+  --va-on-error-container: #410002;
+  --va-success: #1e7a3d;
+  --va-on-success: #ffffff;
+  --va-success-container: #a9f0bd;
+  --va-on-success-container: #00210d;
+  --va-warning: #8a5a00;
+  --va-on-warning: #ffffff;
+  --va-warning-container: #ffdf9e;
+  --va-on-warning-container: #2b1900;
+
+  --va-surface: #f7faf4;
+  --va-on-surface: #1a1d19;
+  --va-surface-container: #eaf0e6;
+  --va-surface-container-high: #dde6da;
+  --va-surface-container-highest: #d0dad1;
+  --va-surface-variant: #dde5d9;
+  --va-on-surface-variant: #434c41;
+  --va-inverse-surface: #2e312d;
+  --va-inverse-on-surface: #eff1eb;
+  --va-outline: #727d71;
+  --va-outline-variant: #c2ccc1;
+  --va-scrim: #000000;
+  --va-shadow: #1a1d19;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --va-primary: #a5d8a6;
+    --va-on-primary: #0a3515;
+    --va-primary-container: #1e4a26;
+    --va-on-primary-container: #b8f0bc;
+    --va-secondary: #d3c09a;
+    --va-on-secondary: #3a2f10;
+    --va-secondary-container: #53460f;
+    --va-on-secondary-container: #f2e2bb;
+    --va-tertiary: #ffc55c;
+    --va-on-tertiary: #452c00;
+    --va-tertiary-container: #6a4c00;
+    --va-on-tertiary-container: #ffdf9e;
+    --va-info: #9ccbff;
+    --va-on-info: #003353;
+    --va-info-container: #004a78;
+    --va-on-info-container: #d1e6ff;
+    --va-error: #ffb4ab;
+    --va-on-error: #690005;
+    --va-error-container: #93000a;
+    --va-on-error-container: #ffdad6;
+    --va-success: #7cd894;
+    --va-on-success: #00391a;
+    --va-success-container: #005227;
+    --va-on-success-container: #a9f0bd;
+    --va-warning: #ffc55c;
+    --va-on-warning: #452c00;
+    --va-warning-container: #6a4c00;
+    --va-on-warning-container: #ffdf9e;
+
+    --va-surface: #101410;
+    --va-on-surface: #e0e4dd;
+    --va-surface-container: #181d18;
+    --va-surface-container-high: #222821;
+    --va-surface-container-highest: #2d332c;
+    --va-surface-variant: #434c41;
+    --va-on-surface-variant: #c3cdc2;
+    --va-inverse-surface: #e0e4dd;
+    --va-inverse-on-surface: #2e312d;
+    --va-outline: #89938a;
+    --va-outline-variant: #3f493f;
+    --va-scrim: #000000;
+    --va-shadow: #000000;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --va-primary: #a5d8a6;
+  --va-on-primary: #0a3515;
+  --va-primary-container: #1e4a26;
+  --va-on-primary-container: #b8f0bc;
+  --va-secondary: #d3c09a;
+  --va-on-secondary: #3a2f10;
+  --va-secondary-container: #53460f;
+  --va-on-secondary-container: #f2e2bb;
+  --va-tertiary: #ffc55c;
+  --va-on-tertiary: #452c00;
+  --va-tertiary-container: #6a4c00;
+  --va-on-tertiary-container: #ffdf9e;
+  --va-info: #9ccbff;
+  --va-on-info: #003353;
+  --va-info-container: #004a78;
+  --va-on-info-container: #d1e6ff;
+  --va-error: #ffb4ab;
+  --va-on-error: #690005;
+  --va-error-container: #93000a;
+  --va-on-error-container: #ffdad6;
+  --va-success: #7cd894;
+  --va-on-success: #00391a;
+  --va-success-container: #005227;
+  --va-on-success-container: #a9f0bd;
+  --va-warning: #ffc55c;
+  --va-on-warning: #452c00;
+  --va-warning-container: #6a4c00;
+  --va-on-warning-container: #ffdf9e;
+
+  --va-surface: #101410;
+  --va-on-surface: #e0e4dd;
+  --va-surface-container: #181d18;
+  --va-surface-container-high: #222821;
+  --va-surface-container-highest: #2d332c;
+  --va-surface-variant: #434c41;
+  --va-on-surface-variant: #c3cdc2;
+  --va-inverse-surface: #e0e4dd;
+  --va-inverse-on-surface: #2e312d;
+  --va-outline: #89938a;
+  --va-outline-variant: #3f493f;
+  --va-scrim: #000000;
+  --va-shadow: #000000;
+}

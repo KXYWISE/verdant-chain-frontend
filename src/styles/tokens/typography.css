@@ -1,0 +1,40 @@
+/*
+ * VerdAnt design tokens — type scale.
+ * M3 Expressive display/headline/title/body/label roles.
+ * Font families map to the Next.js-loaded Geist variables (--font-geist-*).
+ */
+
+:root {
+  --va-font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --va-font-mono:
+    var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Display */
+  --va-type-display-lg: 3.5rem;
+  --va-type-display-md: 2.8125rem;
+  --va-type-display-sm: 2.25rem;
+  --va-type-headline: 1.75rem;
+  --va-type-title-lg: 1.375rem;
+  --va-type-title-md: 1.125rem;
+  --va-type-title-sm: 1rem;
+  --va-type-body-lg: 1rem;
+  --va-type-body-md: 0.875rem;
+  --va-type-body-sm: 0.8125rem;
+  --va-type-label-lg: 0.875rem;
+  --va-type-label-md: 0.75rem;
+  --va-type-label-sm: 0.6875rem;
+
+  /* Line heights (unitless) */
+  --va-lh-display: 1.05;
+  --va-lh-headline: 1.1;
+  --va-lh-title: 1.25;
+  --va-lh-body: 1.5;
+  --va-lh-label: 1.33;
+
+  /* Letter spacing */
+  --va-ls-display: -0.01em;
+  --va-ls-title: 0em;
+  --va-ls-label: 0.02em;
+}

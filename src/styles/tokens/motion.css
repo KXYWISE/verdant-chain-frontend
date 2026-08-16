@@ -1,0 +1,19 @@
+/*
+ * VerdAnt design tokens — motion.
+ * M3 Expressive emphasizes meaningful, natural motion. Spring-like easing.
+ */
+
+:root {
+  /* Durations */
+  --va-motion-100: 100ms;
+  --va-motion-150: 150ms;
+  --va-motion-200: 200ms;
+  --va-motion-300: 300ms;
+  --va-motion-500: 500ms;
+
+  /* Easing curves */
+  --va-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --va-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --va-ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --va-ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+}

@@ -1,0 +1,24 @@
+/*
+ * VerdAnt design tokens — layout & interaction.
+ * Container widths, breakpoints, and focus-ring conventions.
+ */
+
+:root {
+  --va-container-sm: 36rem;
+  --va-container-md: 48rem;
+  --va-container-lg: 64rem;
+  --va-container-xl: 80rem;
+
+  /* Breakpoints (px) — use in media queries only */
+  --va-bp-sm: 640px;
+  --va-bp-md: 768px;
+  --va-bp-lg: 1024px;
+  --va-bp-xl: 1280px;
+
+  --va-focus-ring-width: 2px;
+  --va-focus-ring-offset: 2px;
+  --va-focus-ring-color: var(--va-primary);
+  --va-control-height: 2.5rem;
+  --va-control-min-target: 2.75rem;
+  --va-icon-size: 1.25rem;
+}

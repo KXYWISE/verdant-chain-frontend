@@ -1,0 +1,14 @@
+/*
+ * VerdAnt design tokens — shape / corner radius.
+ * M3 Expressive shapes with purposeful, agricultural-infrastructure character.
+ */
+
+:root {
+  --va-shape-none: 0;
+  --va-shape-xs: 0.25rem;
+  --va-shape-sm: 0.5rem;
+  --va-shape-md: 0.75rem;
+  --va-shape-lg: 1rem;
+  --va-shape-xl: 1.75rem;
+  --va-shape-full: 9999px;
+}

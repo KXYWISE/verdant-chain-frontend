@@ -1,0 +1,54 @@
+@import "./tokens/index.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  color: var(--va-on-surface);
+  background: var(--va-surface);
+  font-family: var(--va-font-sans);
+  font-size: var(--va-type-body-lg);
+  line-height: var(--va-lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--va-motion-200) var(--va-ease-standard),
+    color var(--va-motion-200) var(--va-ease-standard);
+}
+
+a {
+  color: var(--va-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: var(--va-focus-ring-width) solid var(--va-focus-ring-color);
+  outline-offset: var(--va-focus-ring-offset);
+}
+
+::selection {
+  background: var(--va-primary-container);
+  color: var(--va-on-primary-container);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
