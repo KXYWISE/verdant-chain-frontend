@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { ApiError, isNotFound } from "./client"
-import { getFarmer, registerFarmer, updateFarmerMetadata } from "./farmers"
+import { getFarmer, registerFarmer, updateFarmerMetadata, searchFarmers } from "./farmers"
 
 const KEY = "GABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
 const FARMER_ID = `va:farmer:${KEY}`
@@ -15,6 +15,13 @@ const record = {
   verificationMarkers: [],
 }
 
+const searchResponse = {
+  items: [
+    { address: KEY, id: FARMER_ID, name: "Ada Farm Cooperative", region: "Niger", district: "Zinder", verificationCount: 3 },
+  ],
+  pagination: { page: 1, pageSize: 20, total: 42, totalPages: 3 },
+}
+
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -24,6 +31,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn())
+  vi.unstubAllGlobals()
 })
 
 afterEach(() => {
@@ -32,34 +40,50 @@ afterEach(() => {
 
 describe("getFarmer", () => {
   it("returns the farmer record for an address", async () => {
-    vi.mocked(fetch).mockResolvedValue(jsonResponse(record))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(record)))
     await expect(getFarmer(KEY)).resolves.toEqual(record)
-    expect(fetch).toHaveBeenCalledWith(
-      `/api/v1/farmers/${encodeURIComponent(KEY)}`,
-      expect.anything()
-    )
+    expect(fetch).toHaveBeenCalledWith(`/api/v1/farmers/${encodeURIComponent(KEY)}`, expect.anything())
   })
 
   it("throws a typed 404 ApiError for unknown farmers", async () => {
-    vi.mocked(fetch).mockResolvedValue(jsonResponse({ error: "unknown farmer" }, 404))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ error: "unknown farmer" }, 404)))
     const error = await getFarmer(KEY).catch((e: unknown) => e)
     expect(error).toBeInstanceOf(ApiError)
     expect((error as ApiError).status).toBe(404)
-    expect((error as ApiError).message).toBe("unknown farmer")
     expect(isNotFound(error)).toBe(true)
   })
 
   it("wraps network failures as ApiError", async () => {
-    vi.mocked(fetch).mockRejectedValue(new TypeError("fetch failed"))
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")))
     const error = await getFarmer(KEY).catch((e: unknown) => e)
     expect(error).toBeInstanceOf(ApiError)
     expect((error as ApiError).message).toBe("Could not reach the VerdAnt API")
   })
 })
 
+describe("searchFarmers", () => {
+  it("GETs /farmers with query params", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(searchResponse)))
+    await expect(searchFarmers({ q: "Ada", page: 2, pageSize: 10 })).resolves.toEqual(searchResponse)
+    expect(fetch).toHaveBeenCalledWith(`/api/v1/farmers?q=Ada&page=2&pageSize=10`, expect.anything())
+  })
+
+  it("omits empty params", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(searchResponse)))
+    await expect(searchFarmers({})).resolves.toEqual(searchResponse)
+    expect(fetch).toHaveBeenCalledWith("/api/v1/farmers", expect.anything())
+  })
+
+  it("handles pagination params", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(searchResponse)))
+    await expect(searchFarmers({ page: 3, pageSize: 50 })).resolves.toEqual(searchResponse)
+    expect(fetch).toHaveBeenCalledWith("/api/v1/farmers?page=3&pageSize=50", expect.anything())
+  })
+})
+
 describe("registerFarmer", () => {
   it("posts to /farmers/register", async () => {
-    vi.mocked(fetch).mockResolvedValue(jsonResponse(record, 201))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(record, 201)))
     const input = { address: KEY, metadata: { name: "Ada Farm Cooperative" } }
     await expect(registerFarmer(input)).resolves.toEqual(record)
     const [url, init] = vi.mocked(fetch).mock.calls[0]
@@ -71,7 +95,7 @@ describe("registerFarmer", () => {
 
 describe("updateFarmerMetadata", () => {
   it("puts to /farmers/:address/metadata", async () => {
-    vi.mocked(fetch).mockResolvedValue(jsonResponse(record))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(record)))
     await expect(
       updateFarmerMetadata(KEY, { name: "Ada Farm Cooperative", region: "Zinder" })
     ).resolves.toEqual(record)

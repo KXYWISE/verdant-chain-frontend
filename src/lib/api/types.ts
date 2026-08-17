@@ -32,3 +32,28 @@ export type RegisterFarmerInput = {
   metadata: FarmerProfileMetadata
   metadataHash?: string
 }
+
+export type FarmerSearchItem = {
+  address: string
+  id: string
+  name: string
+  region?: string
+  district?: string
+  verificationCount: number
+}
+
+export type FarmerSearchResponse = {
+  items: FarmerSearchItem[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
+}
+
+export type SearchFarmersParams = {
+  q?: string
+  page?: number
+  pageSize?: number
+}
