@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner } from "@/components/ui"
-import { getFarmer } from "@/lib/api/farmers"
+import { getFarmer, registerFarmer } from "@/lib/api/farmers"
 import { isNotFound } from "@/lib/api/client"
+import { signInWithFreighter } from "@/lib/wallet/auth"
 import {
   getWalletSnapshot,
   getWalletServerSnapshot,
@@ -70,8 +71,16 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
         return
       }
     }
-    // For now just show an alert - the actual registration would need form data
-    alert("Registration form placeholder - fill in metadata and call registerFarmer API")
+    try {
+      await signInWithFreighter()
+      await registerFarmer({
+        address,
+        metadata: { name: address },
+      })
+      await loadFarmer()
+    } catch {
+      alert("Registration failed - ensure the wallet is signed in")
+    }
   }
 
   if (data.loading) {

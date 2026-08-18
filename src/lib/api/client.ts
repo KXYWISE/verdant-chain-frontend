@@ -14,6 +14,29 @@ export function isNotFound(error: unknown): boolean {
   return error instanceof ApiError && error.status === 404
 }
 
+const AUTH_TOKEN_KEY = "verdant.auth.token"
+
+let authToken: string | null = null
+
+/** Attach a bearer token to subsequent API requests. */
+export function setAuthToken(token: string | null): void {
+  authToken = token
+  if (typeof window !== "undefined") {
+    if (token) window.localStorage.setItem(AUTH_TOKEN_KEY, token)
+    else window.localStorage.removeItem(AUTH_TOKEN_KEY)
+  }
+}
+
+export function getAuthToken(): string | null {
+  return authToken
+}
+
+/** Restore a persisted bearer token on the client (safe on the server). */
+export function loadAuthToken(): void {
+  if (typeof window === "undefined") return
+  authToken = window.localStorage.getItem(AUTH_TOKEN_KEY)
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response
   try {
@@ -21,6 +44,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       ...init,
       headers: {
         "content-type": "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
         ...init?.headers,
       },
     })

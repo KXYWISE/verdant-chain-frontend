@@ -57,3 +57,32 @@ export type SearchFarmersParams = {
   page?: number
   pageSize?: number
 }
+
+export type AuthChallenge = {
+  domain: string
+  nonce: string
+  timestamp: string
+  address: string
+}
+
+export type AuthVerifyPayload = {
+  address: string
+  domain: string
+  nonce: string
+  timestamp: string
+  signature: string
+}
+
+export type AuthVerifyResponse = {
+  token: string
+  address: string
+  roles: string[]
+  expires_at: string
+}
+
+export type AuthSession = {
+  token: string
+  address: string
+  roles: string[]
+  expires_at: string
+}
