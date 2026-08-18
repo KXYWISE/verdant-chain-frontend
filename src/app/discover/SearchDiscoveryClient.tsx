@@ -37,9 +37,12 @@ export function SearchDiscoveryClient() {
     if (!normalized) {
       return
     }
-     
+    runSearch(1, 20)
+  }, [normalized])
+
+  function runSearch(page: number, pageSize: number) {
     setLoading(true)
-    searchFarmers({ q: normalized, page: 1, pageSize: 20 })
+    searchFarmers({ q: normalized, page, pageSize })
       .then((resp) => {
         setResults(
           resp.items.map((item) => ({
@@ -71,74 +74,19 @@ export function SearchDiscoveryClient() {
         })
       })
       .finally(() => setLoading(false))
-  }, [normalized])
+  }
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
-    setResults([])
-    setPagination((prev) => ({ ...prev, page: 1 }))
-
-    const normalized = query.trim()
-    if (!normalized) {
-      setLoading(false)
-      return
-    }
-
-    await searchFarmers({ q: normalized, page: 1, pageSize: 20 }).then(
-      (resp) => {
-        setResults(
-          resp.items.map((item) => ({
-            address: item.address,
-            name: item.name,
-            region: item.region,
-            district: item.district,
-            verificationCount: item.verificationCount,
-          }))
-        )
-        setPagination({
-          page: resp.pagination.page,
-          pageSize: resp.pagination.pageSize,
-          total: resp.pagination.total,
-          totalPages: resp.pagination.totalPages,
-        })
-      }
-    ).catch((e) => {
-      setError(
-        e instanceof Error ? e.message : "Could not reach the VerdAnt API"
-      )
-      setResults([])
-      setPagination({
-        page: 1,
-        pageSize: 20,
-        total: 0,
-        totalPages: 0,
-      })
-    }).finally(() => setLoading(false))
+    const q = query.trim()
+    if (!q) return
+    setQuery(q)
+    runSearch(1, 20)
   }
 
   const handlePageChange = (page: number) => {
     if (!normalized) return
-    setPagination((prev) => ({ ...prev, page }))
-    searchFarmers({ q: normalized, page, pageSize: pagination.pageSize }).then(
-      (resp) => {
-        setResults(
-          resp.items.map((item) => ({
-            address: item.address,
-            name: item.name,
-            region: item.region,
-            district: item.district,
-            verificationCount: item.verificationCount,
-          }))
-        )
-        setPagination({
-          page: resp.pagination.page,
-          pageSize: resp.pagination.pageSize,
-          total: resp.pagination.total,
-          totalPages: resp.pagination.totalPages,
-        })
-      }
-    )
+    runSearch(page, pagination.pageSize)
   }
 
   return (

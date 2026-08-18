@@ -49,6 +49,10 @@
   --va-on-warning: #ffffff;
   --va-warning-container: #ffdf9e;
   --va-on-warning-container: #2b1900;
+  --va-pill-tone-purple: #e9d7f5;
+  --va-on-pill-tone-purple: #2c0f42;
+  --va-pill-tone-teal: #c0e8e4;
+  --va-on-pill-tone-teal: #062422;
 
   --va-surface: #f7faf4;
   --va-on-surface: #1a1d19;
@@ -97,6 +101,10 @@
     --va-on-warning: #452c00;
     --va-warning-container: #6a4c00;
     --va-on-warning-container: #ffdf9e;
+    --va-pill-tone-purple: #543070;
+    --va-on-pill-tone-purple: #e9d7f5;
+    --va-pill-tone-teal: #16524d;
+    --va-on-pill-tone-teal: #c0e8e4;
 
     --va-surface: #101410;
     --va-on-surface: #e0e4dd;
@@ -145,6 +153,10 @@
   --va-on-warning: #452c00;
   --va-warning-container: #6a4c00;
   --va-on-warning-container: #ffdf9e;
+  --va-pill-tone-purple: #543070;
+  --va-on-pill-tone-purple: #e9d7f5;
+  --va-pill-tone-teal: #16524d;
+  --va-on-pill-tone-teal: #c0e8e4;
 
   --va-surface: #101410;
   --va-on-surface: #e0e4dd;

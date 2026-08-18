@@ -42,3 +42,33 @@
   background: var(--va-surface-variant);
   color: var(--va-on-surface-variant);
 }
+
+.yellow {
+  background: var(--va-warning-container);
+  color: var(--va-on-warning-container);
+}
+
+.green {
+  background: var(--va-success-container);
+  color: var(--va-on-success-container);
+}
+
+.blue {
+  background: var(--va-info-container);
+  color: var(--va-on-info-container);
+}
+
+.purple {
+  background: var(--va-pill-tone-purple);
+  color: var(--va-on-pill-tone-purple);
+}
+
+.teal {
+  background: var(--va-pill-tone-teal);
+  color: var(--va-on-pill-tone-teal);
+}
+
+.grey {
+  background: var(--va-surface-variant);
+  color: var(--va-on-surface-variant);
+}

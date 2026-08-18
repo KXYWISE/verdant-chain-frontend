@@ -9,6 +9,20 @@ import { getWalletSnapshot, subscribeWallet, connectWallet } from "@/lib/wallet/
 import { useSyncExternalStore } from "react"
 import styles from "./farmer-profile.module.css"
 
+// Verification marker kinds vocabulary (Agent #2 canonical vocabulary)
+const markerKindToTone: Record<string, "yellow" | "green" | "blue" | "purple" | "teal" | "grey"> = {
+  kyc: "yellow",
+  "registered_land": "green",
+  "coop_member": "blue",
+  "organic_certified": "purple",
+  "registered_animal": "teal",
+  "verified_proof": "grey",
+}
+
+function getMarkerTone(kind: string): "yellow" | "green" | "blue" | "purple" | "teal" | "grey" {
+  return markerKindToTone[kind] || "grey"
+}
+
 interface FarmerProfileClientProps {
   address: string
 }
@@ -192,7 +206,7 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
               <div className={styles.markers}>
                 {farmer.verificationMarkers.map((marker, i) => (
                   <div key={i} className={styles.marker}>
-                    <StatusPill tone="info" label={marker.kind} />
+                    <StatusPill tone={getMarkerTone(marker.kind)} label={marker.kind} />
                     <Text as="span" size="body-sm" tone="muted">
                       Issuer: {marker.issuer}
                     </Text>
