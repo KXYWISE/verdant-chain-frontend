@@ -1,5 +1,14 @@
 import { api } from "./client"
-import type { FarmerProfileMetadata, FarmerRecord, FarmerSearchResponse, RegisterFarmerInput, SearchFarmersParams } from "./types"
+import type {
+  FarmerProfileMetadata,
+  FarmerRecord,
+  FarmerSearchResponse,
+  RegisterFarmerInput,
+  SearchFarmersParams,
+} from "./types"
+import type { FarmerSearchItem } from "./types"
+
+export type { FarmerSearchItem, FarmerSearchResponse, SearchFarmersParams }
 
 export async function getFarmer(address: string): Promise<FarmerRecord> {
   return api.get<FarmerRecord>(`/farmers/${encodeURIComponent(address)}`)
