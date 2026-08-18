@@ -1,144 +1,267 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner, Input } from "@/components/ui"
-import { getFarmer } from "@/lib/api/farmers"
-import { isNotFound } from "@/lib/api/client"
-import { toFarmerId, shortAddress } from "@/lib/api/address"
-import { Grid, Stack } from "@/components/ui"
+import { searchFarmers } from "@/lib/api/farmers"
+import { useRouter } from "next/navigation"
+import { Grid } from "@/components/ui"
 import styles from "./search-discovery.module.css"
 
 export function SearchDiscoveryClient() {
   const [query, setQuery] = useState("")
-  const [result, setResult] = useState<{
-    farmer: Awaited<ReturnType<typeof getFarmer>> | null
-    error: Error | null
-    loading: boolean
-  }>({ farmer: null, error: null, loading: false })
+  const [results, setResults] = useState<
+    | {
+        address: string
+        name: string
+        region?: string
+        district?: string
+        verificationCount: number
+      }[]
+    | []
+  >([])
+
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 20,
+    total: 0,
+    totalPages: 0,
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  const normalized = query.trim()
+
+  useEffect(() => {
+    if (!normalized) {
+      return
+    }
+    setLoading(true)
+    searchFarmers({ q: normalized, page: 1, pageSize: 20 })
+      .then((resp) => {
+        setResults(
+          resp.items.map((item) => ({
+            address: item.address,
+            name: item.name,
+            region: item.region,
+            district: item.district,
+            verificationCount: item.verificationCount,
+          }))
+        )
+        setPagination({
+          page: resp.pagination.page,
+          pageSize: resp.pagination.pageSize,
+          total: resp.pagination.total,
+          totalPages: resp.pagination.totalPages,
+        })
+        setError(null)
+      })
+      .catch((e) => {
+        setError(
+          e instanceof Error ? e.message : "Could not reach the VerdAnt API"
+        )
+        setResults([])
+        setPagination({
+          page: 1,
+          pageSize: 20,
+          total: 0,
+          totalPages: 0,
+        })
+      })
+      .finally(() => setLoading(false))
+  }, [normalized])
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+    setResults([])
+    setPagination((prev) => ({ ...prev, page: 1 }))
+
     const normalized = query.trim()
-    if (!normalized) return
-    setResult({ farmer: null, error: null, loading: true })
-    try {
-      const farmer = await getFarmer(normalized)
-      setResult({ farmer, error: null, loading: false })
-    } catch (error) {
-      setResult({ farmer: null, error: error as Error, loading: false })
+    if (!normalized) {
+      setLoading(false)
+      return
     }
+
+    await searchFarmers({ q: normalized, page: 1, pageSize: 20 }).then(
+      (resp) => {
+        setResults(
+          resp.items.map((item) => ({
+            address: item.address,
+            name: item.name,
+            region: item.region,
+            district: item.district,
+            verificationCount: item.verificationCount,
+          }))
+        )
+        setPagination({
+          page: resp.pagination.page,
+          pageSize: resp.pagination.pageSize,
+          total: resp.pagination.total,
+          totalPages: resp.pagination.totalPages,
+        })
+      }
+    ).catch((e) => {
+      setError(
+        e instanceof Error ? e.message : "Could not reach the VerdAnt API"
+      )
+      setResults([])
+      setPagination({
+        page: 1,
+        pageSize: 20,
+        total: 0,
+        totalPages: 0,
+      })
+    }).finally(() => setLoading(false))
+  }
+
+  const handlePageChange = (page: number) => {
+    if (!normalized) return
+    setPagination((prev) => ({ ...prev, page }))
+    searchFarmers({ q: normalized, page, pageSize: pagination.pageSize }).then(
+      (resp) => {
+        setResults(
+          resp.items.map((item) => ({
+            address: item.address,
+            name: item.name,
+            region: item.region,
+            district: item.district,
+            verificationCount: item.verificationCount,
+          }))
+        )
+        setPagination({
+          page: resp.pagination.page,
+          pageSize: resp.pagination.pageSize,
+          total: resp.pagination.total,
+          totalPages: resp.pagination.totalPages,
+        })
+      }
+    )
   }
 
   return (
     <div className={styles.container}>
       <Heading as="h2">AgriScout Discovery</Heading>
       <Text as="p" tone="muted" className={styles.subtitle}>
-        Look up a farmer by Stellar public key or <code>va:farmer:G…</code> identifier. No directory
-        listing is available yet — search by exact address.
+        Substring search on farmer name, region, or district. Use the form below.
       </Text>
 
       <form onSubmit={handleSearch} className={styles.form}>
         <Input
-          label="Farmer address"
-          placeholder="GABCD… or va:farmer:GABCD…"
+          label="Search farmers"
+          placeholder="Name, region, or district..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button type="submit" loading={false}>
+        <Button type="submit" loading={loading}>
           Search
         </Button>
       </form>
 
-      {result.loading && (
-        <Spinner size="md" label="Looking up farmer…" className={styles.spinner} />
-      )}
-
-      {result.error && (
+      {error && (
         <Card elevation={1} className={styles.errorCard}>
-          {isNotFound(result.error) ? (
-            <>
-              <StatusPill tone="error" label="Not found" />
-              <Text as="p">No farmer registered at that address.</Text>
-            </>
-          ) : (
-            <>
-              <StatusPill tone="error" label="Error" />
-              <Text as="p" tone="error">
-                {result.error?.message ?? "Unknown error"}
-              </Text>
-            </>
-          )}
+          <StatusPill tone="error" label="Error" />
+          <Text as="p" tone="error">
+            {error}
+          </Text>
         </Card>
       )}
 
-      {result.farmer && (
-        <Card elevation={1} className={styles.resultCard}>
-          <div className={styles.header}>
-            <StatusPill
-              tone={result.farmer.registered ? "success" : "pending"}
-              label={result.farmer.registered ? "Registered" : "Not registered"}
-            />
-            {result.farmer.id && <span className={styles.farmerId}>{result.farmer.id}</span>}
-          </div>
-          <div className={styles.meta}>
-            {result.farmer.metadata && (
-              <>
-                <p>
-                  <strong>Name:</strong> {result.farmer.metadata.profile.name}
-                </p>
-                {result.farmer.metadata.profile.region && (
-                  <p>
-                    <strong>Region:</strong> {result.farmer.metadata.profile.region}
-                  </p>
-                )}
-                {result.farmer.metadata.profile.district && (
-                  <p>
-                    <strong>District:</strong> {result.farmer.metadata.profile.district}
-                  </p>
-                )}
-                {result.farmer.metadata.profile.bio && (
-                  <p>
-                    <strong>Bio:</strong> {result.farmer.metadata.profile.bio}
-                  </p>
-                )}
-              </>
-            )}
-            {result.farmer.verificationMarkers && result.farmer.verificationMarkers.length > 0 && (
-              <div className={styles.markers}>
-                {result.farmer.verificationMarkers.map((marker, i) => (
-                  <span key={i} className={styles.marker}>
-                    <StatusPill tone="info" label={marker.kind} />
-                  </span>
-                ))}
+      {loading && (
+        <Spinner size="md" label="Searching farmers…" className={styles.spinner} />
+      )}
+
+      {results.length > 0 && (
+        <div className={styles.resultsGrid}>
+          {results.map((farmer) => (
+            <Card
+              key={farmer.address}
+              elevation={1}
+              className={styles.resultCard}
+              onClick={() => router.push("/farmers/" + farmer.address)}
+            >
+              <div className={styles.header}>
+                <StatusPill
+                  tone={farmer.verificationCount > 0 ? "success" : "info"}
+                  label={`Verified (${farmer.verificationCount})`}
+                />
+                <span className={styles.farmerId}>
+                  {farmer.address.substring(0, 6)}…{farmer.address.substring(6)}
+                </span>
               </div>
-            )}
-          </div>
+              <div className={styles.meta}>
+                <p>
+                  <strong>Name:</strong> {farmer.name}
+                </p>
+                {farmer.region && (
+                  <p>
+                    <strong>Region:</strong> {farmer.region}
+                  </p>
+                )}
+                {farmer.district && (
+                  <p>
+                    <strong>District:</strong> {farmer.district}
+                  </p>
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {results.length === 0 && normalized && (
+        <Card elevation={1} className={styles.emptyState}>
+          <StatusPill tone="info" label="No farmers found" />
+          <Text>
+            No farmers matched{" "}
+            <code>{normalized}</code>{" "}
+            — try adjusting your search terms.
+          </Text>
         </Card>
       )}
 
-      <section className={styles.future} aria-labelledby="future-heading">
+      {!normalized && (
+        <Card elevation={1} className={styles.emptyState}>
+          <StatusPill tone="info" label="Enter a search term" />
+          <Text>
+            Enter a name, region, or district to search the farmer directory.
+          </Text>
+        </Card>
+      )}
+
+      <section
+        className={styles.future}
+        aria-labelledby="future-heading"
+      >
         <Heading as="h3" id="future-heading">
-          Directory & reputation (coming in Phase 4)
+          Directory & reputation
         </Heading>
         <Grid cols={3} gap={4} responsive className={styles.futureGrid}>
           <Card elevation={1} container>
             <Heading as="h4">Verified farmers</Heading>
-            <Text tone="muted">Directory of farmers with on-chain verification markers.</Text>
+            <Text tone="muted">
+              Directory of farmers with on-chain verification markers.
+            </Text>
           </Card>
           <Card elevation={1} container>
             <Heading as="h4">Reputation scores</Heading>
-            <Text tone="muted">Aggregated scores from verification history and activity.</Text>
+            <Text tone="muted">
+              Aggregated scores from verification history and activity.
+            </Text>
           </Card>
           <Card elevation={1} container>
             <Heading as="h4">Opportunity matching</Heading>
-            <Text tone="muted">Connect farmers with buyers, equipment, and financing.</Text>
+            <Text tone="muted">
+              Connect farmers with buyers, equipment, and financing.
+            </Text>
           </Card>
         </Grid>
         <Text tone="muted" className={styles.note}>
-          The Farmer API contract (<code>docs/api/farmers.md</code>) currently defines only{" "}
-          <code>GET /farmers/:address</code>. A list/search endpoint will be requested from Agent #4
-          for the full AgriScout directory.
+          Search the directory above for registered farmers. Reputation and verified
+          history surfaces will be available in a future Phase 4b increment after the
+          verification contract documented in /docs/architecture/integration.md is
+          implemented and indexed.
         </Text>
       </section>
     </div>
