@@ -37,7 +37,7 @@ export function SearchDiscoveryClient() {
     if (!normalized) {
       return
     }
-    // eslint-disable-line
+     
     setLoading(true)
     searchFarmers({ q: normalized, page: 1, pageSize: 20 })
       .then((resp) => {
