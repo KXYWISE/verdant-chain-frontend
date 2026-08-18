@@ -5,7 +5,12 @@ import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner } from "@/components/ui"
 import { getFarmer } from "@/lib/api/farmers"
 import { isNotFound } from "@/lib/api/client"
-import { getWalletSnapshot, subscribeWallet, connectWallet } from "@/lib/wallet/wallet"
+import {
+  getWalletSnapshot,
+  getWalletServerSnapshot,
+  subscribeWallet,
+  connectWallet,
+} from "@/lib/wallet/wallet"
 import { useSyncExternalStore } from "react"
 import styles from "./farmer-profile.module.css"
 
@@ -34,9 +39,11 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
     loading: boolean
   }>({ farmer: null, error: null, loading: true })
 
-  const walletStatus = useSyncExternalStore(subscribeWallet, getWalletSnapshot, () => ({
-    state: "disconnected",
-  }))
+  const walletStatus = useSyncExternalStore(
+    subscribeWallet,
+    getWalletSnapshot,
+    getWalletServerSnapshot
+  )
 
   async function loadFarmer() {
     setData((prev) => ({ ...prev, loading: true, error: null }))

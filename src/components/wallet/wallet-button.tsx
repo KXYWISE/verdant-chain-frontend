@@ -8,6 +8,7 @@ import {
   disconnectWallet,
   subscribeWallet,
   getWalletSnapshot,
+  getWalletServerSnapshot,
   WalletStatus,
   WalletError,
 } from "@/lib/wallet/wallet"
@@ -15,9 +16,11 @@ import { Button } from "@/components/ui"
 import styles from "./wallet-button.module.css"
 
 export function WalletButton() {
-  const status = useSyncExternalStore<WalletStatus>(subscribeWallet, getWalletSnapshot, () => ({
-    state: "disconnected",
-  }))
+  const status = useSyncExternalStore<WalletStatus>(
+    subscribeWallet,
+    getWalletSnapshot,
+    getWalletServerSnapshot
+  )
 
   const handleConnect = useCallback(async () => {
     try {
