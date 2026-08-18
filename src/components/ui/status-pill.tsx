@@ -1,7 +1,18 @@
 import type { ComponentPropsWithoutRef } from "react"
 import styles from "./status-pill.module.css"
 
-export type StatusTone = "success" | "pending" | "error" | "info" | "neutral"
+export type StatusTone =
+  | "success"
+  | "pending"
+  | "error"
+  | "info"
+  | "neutral"
+  | "yellow"
+  | "green"
+  | "blue"
+  | "purple"
+  | "teal"
+  | "grey"
 
 type StatusPillProps = {
   tone?: StatusTone

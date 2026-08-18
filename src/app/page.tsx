@@ -3,11 +3,31 @@ import { Button, Card, Heading, StatusPill, Text, ThemeToggle, WalletButton } fr
 import styles from "./home.module.css"
 
 const pillars = [
-  { name: "AgriScout", blurb: "Farmer discovery, profiles, and agricultural reputation." },
-  { name: "AgroProof", blurb: "Verification along the harvest-to-buyer chain." },
-  { name: "AgriLease", blurb: "Equipment marketplace with escrowed bookings." },
-  { name: "FarmFund", blurb: "Milestone-based agricultural financing." },
-  { name: "LivestockPass", blurb: "Identity and history for livestock." },
+  {
+    name: "AgriScout",
+    blurb: "Farmer discovery, profiles, and agricultural reputation.",
+    href: "/discover",
+  },
+  {
+    name: "AgroProof",
+    blurb: "Verification along the harvest-to-buyer chain.",
+    href: "/verify",
+  },
+  {
+    name: "AgriLease",
+    blurb: "Equipment marketplace with escrowed bookings.",
+    href: "/equipment",
+  },
+  {
+    name: "FarmFund",
+    blurb: "Milestone-based agricultural financing.",
+    href: "/financing",
+  },
+  {
+    name: "LivestockPass",
+    blurb: "Identity and history for livestock.",
+    href: "/livestock",
+  },
 ]
 
 export default function Home() {
@@ -21,6 +41,10 @@ export default function Home() {
         <nav className={styles.nav}>
           <Link href="/design-system">Design system</Link>
           <Link href="/discover">AgriScout</Link>
+          <Link href="/verify">Verification</Link>
+          <Link href="/equipment">Equipment</Link>
+          <Link href="/financing">Financing</Link>
+          <Link href="/livestock">Livestock</Link>
           <WalletButton />
         </nav>
       </div>
@@ -46,12 +70,15 @@ export default function Home() {
 
       <section className={styles.pillars} aria-label="Feature pillars">
         {pillars.map((pillar) => (
-          <Card key={pillar.name} interactive className={styles.pillarCard}>
-            <Heading as="h3">{pillar.name}</Heading>
-            <Text as="p" tone="muted">
-              {pillar.blurb}
-            </Text>
-          </Card>
+          <Link key={pillar.name} href={pillar.href} className={styles.pillarCardLink}>
+            <Card interactive className={styles.pillarCard}>
+              <Heading as="h3">{pillar.name}</Heading>
+              <Text as="p" tone="muted">
+                {pillar.blurb}
+              </Text>
+              <span className={styles.pillarLink}>Explore &rarr;</span>
+            </Card>
+          </Link>
         ))}
       </section>
 

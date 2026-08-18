@@ -3,11 +3,31 @@
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner } from "@/components/ui"
-import { getFarmer } from "@/lib/api/farmers"
+import { getFarmer, registerFarmer } from "@/lib/api/farmers"
 import { isNotFound } from "@/lib/api/client"
-import { getWalletSnapshot, subscribeWallet, connectWallet } from "@/lib/wallet/wallet"
+import { signInWithFreighter } from "@/lib/wallet/auth"
+import {
+  getWalletSnapshot,
+  getWalletServerSnapshot,
+  subscribeWallet,
+  connectWallet,
+} from "@/lib/wallet/wallet"
 import { useSyncExternalStore } from "react"
 import styles from "./farmer-profile.module.css"
+
+// Verification marker kinds vocabulary (Agent #2 canonical vocabulary)
+const markerKindToTone: Record<string, "yellow" | "green" | "blue" | "purple" | "teal" | "grey"> = {
+  kyc: "yellow",
+  "registered_land": "green",
+  "coop_member": "blue",
+  "organic_certified": "purple",
+  "registered_animal": "teal",
+  "verified_proof": "grey",
+}
+
+function getMarkerTone(kind: string): "yellow" | "green" | "blue" | "purple" | "teal" | "grey" {
+  return markerKindToTone[kind] || "grey"
+}
 
 interface FarmerProfileClientProps {
   address: string
@@ -20,9 +40,11 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
     loading: boolean
   }>({ farmer: null, error: null, loading: true })
 
-  const walletStatus = useSyncExternalStore(subscribeWallet, getWalletSnapshot, () => ({
-    state: "disconnected",
-  }))
+  const walletStatus = useSyncExternalStore(
+    subscribeWallet,
+    getWalletSnapshot,
+    getWalletServerSnapshot
+  )
 
   async function loadFarmer() {
     setData((prev) => ({ ...prev, loading: true, error: null }))
@@ -49,8 +71,16 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
         return
       }
     }
-    // For now just show an alert - the actual registration would need form data
-    alert("Registration form placeholder - fill in metadata and call registerFarmer API")
+    try {
+      await signInWithFreighter()
+      await registerFarmer({
+        address,
+        metadata: { name: address },
+      })
+      await loadFarmer()
+    } catch {
+      alert("Registration failed - ensure the wallet is signed in")
+    }
   }
 
   if (data.loading) {
@@ -192,7 +222,7 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
               <div className={styles.markers}>
                 {farmer.verificationMarkers.map((marker, i) => (
                   <div key={i} className={styles.marker}>
-                    <StatusPill tone="info" label={marker.kind} />
+                    <StatusPill tone={getMarkerTone(marker.kind)} label={marker.kind} />
                     <Text as="span" size="body-sm" tone="muted">
                       Issuer: {marker.issuer}
                     </Text>

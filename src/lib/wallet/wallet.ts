@@ -31,6 +31,13 @@ export function getWalletSnapshot(): WalletStatus {
   return status
 }
 
+const SERVER_STATUS: WalletStatus = { state: "disconnected" }
+
+/** Cached server snapshot so useSyncExternalStore doesn't loop on SSR. */
+export function getWalletServerSnapshot(): WalletStatus {
+  return SERVER_STATUS
+}
+
 function setStatus(next: WalletStatus) {
   status = next
   emit()
