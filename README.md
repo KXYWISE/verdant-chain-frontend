@@ -1,50 +1,46 @@
-# VerdAnt Frontend — Project Proposal
+# VerdAnt Frontend
 
 **The user-facing application for the VerdAnt ecosystem — open agricultural
 technology & financial infrastructure built on Stellar/Soroban.**
 
-**Document status:** 2026-08-18 · Revision 2
-**Owner:** Agent #3 (Frontend Engineer)
-**Part of:** the VerdAnt three-repository system (this repo, `verdant-backend`,
-`verdant-contracts`).
+This repository delivers the design system, the AgriScout discovery + farmer
+profile surfaces, four feature landing pages (AgroProof, AgriLease, FarmFund,
+LivestockPass), and the SEP-40 Freighter wallet-connect flow against the
+VerdAnt backend.
 
----
+## Prerequisites
 
-## 1. Background
+- Node.js 18+
+- npm
 
-VerdAnt anchors farm identity, verification, equipment leasing, financing, and
-livestock provenance on the Stellar blockchain. The backend provides the APIs
-and wallet authentication; the contracts provide on-chain state. But none of
-that reaches a producer or a counterparty without a trustworthy, usable
-interface. This repository delivers that interface: a design system, the
-AgriScout discovery and farmer-profile surfaces, four feature landing pages
-(AgroProof, AgriLease, FarmFund, LivestockPass), and the SEP-40 Freighter
-wallet-connect flow against the VerdAnt backend.
+## Setup
 
-## 2. Objectives
+```bash
+npm install
+npm run dev
+```
 
-1. Deliver a coherent **design system** with a distinct VerdAnt identity
-   (AD-007), implemented with design tokens and reusable primitives.
-2. Provide **AgriScout** discovery (search grid) and farmer-profile surfaces
-   backed by the backend Farmer API.
-3. Provide feature **landing surfaces** for AgroProof, AgriLease, FarmFund, and
-   LivestockPass.
-4. Integrate **SEP-40 wallet authentication** (Freighter `signMessage`) with
-   bearer-token sessions, byte-compatible with the backend's challenge message.
-5. Enforce quality gates: strict TypeScript, lint, typecheck, unit/component
-   tests (Vitest), and E2E (Playwright).
+Open http://localhost:3000. For API-backed routes (`/discover`,
+`/farmers/[address]`), the backend must be running and `src/lib/api/config.ts`
+must point at it.
 
-## 3. Scope
+## Scripts
 
-**In scope.** Next.js App Router application, design system and primitives,
-AgriScout discovery/profile, four feature landings, wallet connect and sign-in,
-API client layer, theming, tests, and E2E specs.
+| Command                | Purpose                                         |
+| ---------------------- | ----------------------------------------------- |
+| `npm run dev`          | Development server                              |
+| `npm run build`        | Production build                                |
+| `npm run start`        | Serve production build                          |
+| `npm run lint`         | ESLint check                                    |
+| `npm run lint:fix`     | ESLint fix                                      |
+| `npm run format`       | Prettier write                                  |
+| `npm run format:check` | Prettier check                                  |
+| `npm run typecheck`    | TypeScript check (`tsc --noEmit`)               |
+| `npm test`             | Vitest (unit/component) run                     |
+| `npm run test:watch`   | Vitest watch mode                               |
+| `npm run test:e2e`     | Playwright E2E (needs `npx playwright install`) |
 
-**Out of scope.** On-chain interaction beyond wallet sign-in (contract calls are
-routed through the backend); backend/API business logic (handled by
-`verdant-backend`); utility-CSS frameworks (coordination rule).
-
-## 4. Proposed solution & architecture
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -75,21 +71,17 @@ routed through the backend); backend/API business logic (handled by
 ```
 
 **Data flow.** Server components fetch/route; client components call the
-`src/lib/api` data layer, which talks to the backend REST API (contract of
-record in the coordination `docs/api/` tree). Wallet actions use `src/lib/wallet`
-and `src/lib/api/auth.ts`.
+`src/lib/api` data layer, which talks to the backend REST API (contract in the
+coordination root's `docs/api/`). Wallet actions use `src/lib/wallet` and
+`src/lib/api/auth.ts`.
 
-**Stack.** Next.js (App Router) · React · TypeScript (strict) · Material 3
-Expressive foundation with a distinct VerdAnt identity (AD-007) · plain CSS
-custom properties (design tokens) + CSS Modules, **no utility CSS** · dark mode
-first-class via `prefers-color-scheme` + `data-theme` · Vitest + React Testing
-Library (unit/component) · Playwright (E2E) · `@stellar/freighter-api`
-(SEP-40 `signMessage`) · API client with `localStorage` bearer-token
-persistence.
+**Provider stack** (in `src/app/layout.tsx`):
 
-## 5. Deliverables
+1. `PreferencesProvider` (outermost) — locale/currency preferences.
+2. `ToastProvider` — global notification system.
+3. `WalletProvider` (innermost) — Stellar wallet connections.
 
-### 5.1 Delivered
+## Route map
 
 | Route | Purpose | Data source |
 |-------|---------|-------------|
@@ -102,84 +94,72 @@ persistence.
 | `/livestock` | **LivestockPass** feature landing (livestock identity/history) | static demo data |
 | `/design-system` | Design-system showcase (tokens + primitives) | static |
 
-### 5.2 Delivered — wallet & SEP-40 auth
+## Design system & styling
 
-`src/lib/wallet/` implements the SEP-40 sign-in flow:
+See `src/styles/README.md` and the `/design-system` route for the full showcase.
 
-1. `connectWallet()` → Stellar `G…` address
-2. `POST /api/v1/auth/challenge { address }` → `{ domain, nonce, timestamp, address }`
-3. build SEP-40 message text (byte-identical to the backend `sep40_message`)
-4. sign with Freighter `signMessage`
-5. `POST /api/v1/auth/verify` → `{ token, address, roles, expires_at }`
-6. persist bearer token (`localStorage`, key `verdant.auth.token`)
-7. `signOut()` clears the token.
-
-`WalletProvider` loads the persisted token on app mount; the farmer register
-handler signs in before calling `registerFarmer`.
-
-### 5.3 Planned
-
-- API-backed read endpoints for projections (escrow/verification/financing)
-  once the backend exposes them.
-- Farmer registration/update UI forms wired to the API.
-- E2E coverage expansion beyond the current specs.
-
-## 6. Design constraints & standards
-
-- **No utility CSS.** All layout uses CSS Modules + tokens (coordination rule).
-- **Tokens.** CSS custom properties in `src/styles/tokens/` — color, typography,
-  spacing, shape, elevation, motion, layout — imported once via
-  `tokens/index.css`.
-- **Primitives.** `src/components/ui/`: `Button`, `Card`, `Container`, `Grid`,
+- **Tokens**: CSS custom properties in `src/styles/tokens/` — color, typography,
+  spacing, shape, elevation, motion, layout. Imported once via `tokens/index.css`.
+- **Primitives** (`src/components/ui/`): `Button`, `Card`, `Container`, `Grid`,
   `Stack`, `Heading`, `Text`, `Input`, `Spinner`, `Badge`, `StatusPill`,
-  `ThemeToggle`; each has a CSS module + Vitest tests where behavior exists.
-- **StatusPill marker mapping.** Verification marker kinds (Agent #2
-  vocabulary) map to pill tones (yellow/green/blue/purple/teal/grey) via
-  `--va-pill-tone-*` tokens.
-- **Quality gates.** Strict TypeScript, lint 0 errors, typecheck clean, tests
-  green, production build succeeds (8 prerendered routes).
+  `ThemeToggle`. Each has a CSS module + Vitest tests where behavior exists.
+- **StatusPill marker mapping**: verification marker kinds map to pill tones
+  (yellow/green/blue/purple/teal/grey) via `--va-pill-tone-*` tokens.
+- **No utility CSS**: all layout uses CSS Modules + tokens.
+- **Dark mode**: first-class via `prefers-color-scheme` + `data-theme`
+  override, persisted by the theme store.
 
-## 7. Timeline / roadmap
+## API & data layer
 
-| Phase | Scope | Status |
-|-------|-------|--------|
-| 1 | Repository foundation, tooling | Done |
-| — | Design system (AD-007), tokens, primitives, `/design-system` | Done |
-| — | Home + four feature landings (AgroProof/AgriLease/FarmFund/LivestockPass) | Done |
-| 3 | AgriScout discovery + farmer profile backed by Farmer API | Done |
-| — | SEP-40 Freighter wallet connect + bearer sessions (byte-compatible message) | Done |
-| — | Projection read surfaces | Pending |
+`src/lib/api/`:
 
-## 8. Development & operations
+- `client.ts` — base fetch client with `Authorization: Bearer` attachment and
+  `setAuthToken`/`getAuthToken`/`loadAuthToken` (`localStorage` persistence,
+  key `verdant.auth.token`).
+- `types.ts` — shared API types (`FarmerRecord`, `FarmerSearchResponse`,
+  `AuthChallenge`, `AuthVerifyPayload`, `AuthVerifyResponse`, …).
+- `farmers.ts` — farmer endpoints (search, profile, register, update).
+- `auth.ts` — SEP-40 auth endpoints (`getAuthChallenge`, `verifyAuth`,
+  `getAuthSession`).
+- `config.ts` — API base URL configuration.
+- `address.ts` — Stellar address validation helpers.
 
-### Getting started
+API contracts (canonical): the coordination root's `docs/api/farmers.md`.
 
-```bash
-npm install
-npm run dev
-```
+## Wallet & SEP-40 auth
 
-Open http://localhost:3000. For API-backed routes (`/discover`,
-`/farmers/[address]`), the backend must be running and `src/lib/api/config.ts`
-must point at it.
+`src/lib/wallet/`:
 
-### Scripts
+- `wallet.ts` — Freighter connect/snapshot logic, `getWalletSnapshot`,
+  `WalletError`.
+- `auth.ts` — **SEP-40 sign-in flow**:
+  1. `connectWallet()` → Stellar `G…` address
+  2. `POST /api/v1/auth/challenge { address }` → `{ domain, nonce, timestamp, address }`
+  3. build SEP-40 message text (byte-identical to the backend `sep40_message`)
+  4. sign with Freighter `signMessage`
+  5. `POST /api/v1/auth/verify` → `{ token, address, roles, expires_at }`
+  6. persist bearer token
+  - `signOut()` clears the token.
+- `auth.test.ts` — message builder + not-connected error + full sign-in happy
+  path tests.
 
-| Command                | Purpose                                         |
-| ---------------------- | ----------------------------------------------- |
-| `npm run dev`          | Development server                              |
-| `npm run build`        | Production build                                |
-| `npm run start`        | Serve production build                          |
-| `npm run lint`         | ESLint check                                    |
-| `npm run lint:fix`     | ESLint fix                                      |
-| `npm run format`       | Prettier write                                  |
-| `npm run format:check` | Prettier check                                  |
-| `npm run typecheck`    | TypeScript check (`tsc --noEmit`)               |
-| `npm test`             | Vitest (unit/component) run                     |
-| `npm run test:watch`   | Vitest watch mode                               |
-| `npm run test:e2e`     | Playwright E2E (needs `npx playwright install`) |
+`WalletProvider` (in `src/components/wallet/wallet-provider.tsx`) loads the
+persisted token on app mount. The farmer register handler signs in before
+calling `registerFarmer`.
 
-### Tests
+## Environment variables
+
+Next.js public variables must be prefixed with `NEXT_PUBLIC_` and are exposed
+to browser JavaScript. Secrets must never be stored in `NEXT_PUBLIC_`
+variables. See `.env.example`:
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for `metadataBase`, Open Graph/Twitter previews, `robots.txt`, `sitemap.xml` (defaults to `http://localhost:3000`) |
+| `NEXT_PUBLIC_WALLET_RPC_URL` | Reserved — public JSON-RPC endpoint |
+| `NEXT_PUBLIC_WALLET_CONNECT_RELAY` | Reserved — WalletConnect relay URL |
+
+## Tests
 
 ```bash
 npm test
@@ -189,7 +169,7 @@ Current suite: **55 tests passing** across 12 files, covering UI primitives
 (Button, Container, Grid, Heading, Input, Stack, StatusPill, ThemeToggle), API
 client + address helpers, wallet store, and the SEP-40 sign-in flow.
 
-### E2E
+## E2E
 
 ```bash
 npx playwright install
@@ -198,7 +178,18 @@ npm run test:e2e
 
 Playwright specs live in `e2e/`.
 
-## 9. Project layout
+## Definition of Done
+
+- Meets documented interface contracts.
+- Includes tests; passes lint, format, typecheck, and the production build
+  (8 prerendered routes).
+- No secrets committed; reuses shared primitives.
+- Committed as small conventional changes.
+
+CI is not yet configured for this repository; run the quality gates locally
+before pushing.
+
+## Project layout
 
 ```
 src/
@@ -228,8 +219,13 @@ src/
 e2e/                        #   Playwright specs
 ```
 
-## 10. Ownership
+## Contributing
 
-Owned and maintained by **Agent #3 (Frontend Engineer)** as part of the VerdAnt
-program. API and auth interfaces are coordinated through the program's
-integration lead (Agent #4) and recorded in the coordination root.
+1. Fork the repo and create a branch from `main`.
+2. Install deps and verify: `npm run typecheck`, `npm run lint`, `npm test`,
+   `npm run build`.
+3. Open a pull request.
+
+## License
+
+MIT
