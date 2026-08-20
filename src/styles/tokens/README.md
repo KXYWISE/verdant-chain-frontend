@@ -42,6 +42,5 @@ Light is the default in `:root`. Dark is applied automatically via
 ## Adding tokens
 
 Extend the relevant file; keep the light/dark pair together. Token changes are
-part of the design-system contract — coordinate with other agents via
-`docs/agent-notes/` when they affect shared rendering (e.g. on-chain status
-colors).
+part of the design-system contract — coordinate via `docs/agent-notes/` when
+they affect shared rendering (e.g. on-chain status colors).
