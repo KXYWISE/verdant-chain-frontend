@@ -92,7 +92,8 @@ export async function signInWithFreighter(): Promise<AuthVerifyResponse> {
   try {
     const res = await signMessage(message, { address })
     if (res.error) throw new WalletError("sign_failed", res.error.message)
-    if (!res.signedMessage) throw new WalletError("sign_failed", "Freighter did not return a signature")
+    if (!res.signedMessage)
+      throw new WalletError("sign_failed", "Freighter did not return a signature")
     signature = toBase64(res.signedMessage)
   } catch (error) {
     if (error instanceof WalletError) throw error

@@ -161,7 +161,9 @@ describe("auth session store", () => {
 
   it("loadAuthSession hydrates a signed-in session from a stored token", async () => {
     vi.mocked(window.localStorage.getItem).mockReturnValue("token-123")
-    mockFetchJson([{ token: "token-123", address: KEY, roles: ["farmer"], expires_at: "2026-08-25T00:00:00Z" }])
+    mockFetchJson([
+      { token: "token-123", address: KEY, roles: ["farmer"], expires_at: "2026-08-25T00:00:00Z" },
+    ])
 
     await authModule.loadAuthSession()
 

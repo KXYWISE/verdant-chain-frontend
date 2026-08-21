@@ -34,7 +34,10 @@ test.describe("site navigation", () => {
   })
 
   test("pillar card links to its feature landing", async ({ page }) => {
-    await page.getByRole("link", { name: /FarmFund/ }).first().click()
+    await page
+      .getByRole("link", { name: /FarmFund/ })
+      .first()
+      .click()
     await expect(page).toHaveURL(/\/financing$/)
   })
 

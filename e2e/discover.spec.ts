@@ -47,10 +47,18 @@ const profileResponse = {
 
 async function mockFarmersApi(page: Page) {
   await page.route("**/api/v1/farmers?*", (route) =>
-    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(searchResponse) })
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(searchResponse),
+    })
   )
   await page.route("**/api/v1/farmers/*", (route) =>
-    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(profileResponse) })
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(profileResponse),
+    })
   )
 }
 

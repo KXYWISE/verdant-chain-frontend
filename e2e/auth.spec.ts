@@ -93,8 +93,13 @@ test.describe("wallet connect and SEP-40 sign-in", () => {
     await page.getByRole("banner").getByRole("button", { name: "Connect Freighter" }).click()
     await page.getByRole("banner").getByRole("button", { name: "Sign in with Freighter" }).click()
 
-    await page.getByRole("banner").getByRole("button", { name: /sign out/i }).click()
+    await page
+      .getByRole("banner")
+      .getByRole("button", { name: /sign out/i })
+      .click()
 
-    await expect(page.getByRole("banner").getByRole("button", { name: "Connect Freighter" })).toBeVisible()
+    await expect(
+      page.getByRole("banner").getByRole("button", { name: "Connect Freighter" })
+    ).toBeVisible()
   })
 })
