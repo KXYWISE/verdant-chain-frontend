@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeScript } from "@/components/theme/theme-script"
+import { SiteHeader } from "@/components/site-header/site-header"
 import { WalletProvider } from "@/components/wallet/wallet-provider"
 import "@/styles/globals.css"
 
@@ -40,7 +41,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeScript />
       </head>
       <body>
-        <WalletProvider>{children}</WalletProvider>
+        <WalletProvider>
+          <SiteHeader />
+          {children}
+        </WalletProvider>
       </body>
     </html>
   )
