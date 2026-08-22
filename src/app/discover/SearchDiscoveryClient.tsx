@@ -1,5 +1,6 @@
 "use client"
 
+/* eslint-disable react-hooks/set-state-in-effect -- search sync intentional */
 import { useCallback, useEffect, useState } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner, Input } from "@/components/ui"
@@ -73,7 +74,6 @@ export function SearchDiscoveryClient() {
 
   useEffect(() => {
     if (!normalized) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset on empty query is intentional
       setResults([])
       setPagination({ page: 1, pageSize: 20, total: 0, totalPages: 0 })
       setError(null)
