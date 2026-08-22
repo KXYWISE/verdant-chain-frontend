@@ -79,22 +79,29 @@ test.describe("wallet connect and SEP-40 sign-in", () => {
     await expect(connect).toBeVisible()
     await connect.click()
 
-    // After connecting, the button should show "Sign in with Freighter"
     const signIn = header.getByRole("button", { name: "Sign in with Freighter" })
     await expect(signIn).toBeVisible()
     await signIn.click()
 
-    // Should now show signed-out UI with Connect Freighter again
-    await expect(header.getByRole("button", { name: "Connect Freighter" })).toBeVisible()
+    // After sign-in, should show signed-in identity (short address with sign-out title)
+    await expect(header.getByRole("button", { name: /Sign out/ })).toBeVisible()
+    await expect(header.getByText("GABCDE")).toBeVisible()
   })
 
   test("sign out returns to the signed-out state", async ({ page }) => {
     await page.goto("/")
 
-    // Connect then sign out
     await page.getByRole("banner").getByRole("button", { name: "Connect Freighter" }).click()
     await page.getByRole("banner").getByRole("button", { name: "Sign in with Freighter" }).click()
+    await expect(page.getByRole("banner").getByRole("button", { name: /Sign out/ })).toBeVisible()
 
-    // Should return to Connect Freighter state
-    await expect(page.getByRole("banner").getByRole("button", { name: "Connect Freighter" })).toBeVisible()
+    await page
+      .getByRole("banner")
+      .getByRole("button", { name: /Sign out/ })
+      .click()
+
+    await expect(
+      page.getByRole("banner").getByRole("button", { name: "Connect Freighter" })
+    ).toBeVisible()
   })
+})

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeScript } from "@/components/theme/theme-script"
 import { SiteHeader } from "@/components/site-header/site-header"
+import { Sidebar } from "@/components/sidebar/sidebar"
 import { WalletProvider } from "@/components/wallet/wallet-provider"
 import "@/styles/globals.css"
 
@@ -30,14 +31,6 @@ export const viewport: Viewport = {
   ],
 }
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/discover", label: "Discover" },
-  { href: "/profile", label: "Profile" },
-  { href: "/settings", label: "Settings" },
-  { href: "/account", label: "Account" },
-]
-
 export default function RootLayout({ children }: { children: import("react").ReactNode }) {
   return (
     <html
@@ -51,18 +44,10 @@ export default function RootLayout({ children }: { children: import("react").Rea
       <body>
         <WalletProvider>
           <SiteHeader />
-          <nav className="mt-4 flex flex-col sm:flex-row gap-2">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="px-3 py-1 rounded text-sm hover:bg-muted/30"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-          {children}
+          <div style={{ display: "flex", minHeight: "calc(100vh - 64px)", alignItems: "stretch" }}>
+            <Sidebar />
+            <main style={{ flex: 1, minWidth: 0 }}>{children}</main>
+          </div>
         </WalletProvider>
       </body>
     </html>
