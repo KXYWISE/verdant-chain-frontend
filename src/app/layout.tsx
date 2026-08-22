@@ -30,6 +30,14 @@ export const viewport: Viewport = {
   ],
 }
 
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/discover", label: "Discover" },
+  { href: "/profile", label: "Profile" },
+  { href: "/settings", label: "Settings" },
+  { href: "/account", label: "Account" },
+]
+
 export default function RootLayout({ children }: { children: import("react").ReactNode }) {
   return (
     <html
@@ -43,6 +51,17 @@ export default function RootLayout({ children }: { children: import("react").Rea
       <body>
         <WalletProvider>
           <SiteHeader />
+          <nav className="mt-4 flex flex-col sm:flex-row gap-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="px-3 py-1 rounded text-sm hover:bg-muted/30"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
           {children}
         </WalletProvider>
       </body>
