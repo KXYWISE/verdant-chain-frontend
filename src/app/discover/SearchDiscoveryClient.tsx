@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner, Input } from "@/components/ui"
 import { searchFarmers } from "@/lib/api/farmers"
@@ -10,15 +10,15 @@ import styles from "./search-discovery.module.css"
 
 export function SearchDiscoveryClient() {
   const [query, setQuery] = useState("")
+  const [submittedQuery, setSubmittedQuery] = useState("")
   const [results, setResults] = useState<
-    | {
-        address: string
-        name: string
-        region?: string
-        district?: string
-        verificationCount: number
-      }[]
-    | []
+    {
+      address: string
+      name: string
+      region?: string
+      district?: string
+      verificationCount: number
+    }[]
   >([])
 
   const [pagination, setPagination] = useState({
@@ -31,55 +31,62 @@ export function SearchDiscoveryClient() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  const normalized = query.trim()
+  const normalized = submittedQuery.trim()
+
+  const runSearch = useCallback(
+    (page: number, pageSize: number) => {
+      if (!normalized) return
+      setLoading(true)
+      searchFarmers({ q: normalized, page, pageSize })
+        .then((resp) => {
+          setResults(
+            resp.items.map((item) => ({
+              address: item.address,
+              name: item.name,
+              region: item.region,
+              district: item.district,
+              verificationCount: item.verificationCount,
+            }))
+          )
+          setPagination({
+            page: resp.pagination.page,
+            pageSize: resp.pagination.pageSize,
+            total: resp.pagination.total,
+            totalPages: resp.pagination.totalPages,
+          })
+          setError(null)
+        })
+        .catch((e) => {
+          setError(e instanceof Error ? e.message : "Could not reach the VerdAnt API")
+          setResults([])
+          setPagination({
+            page: 1,
+            pageSize: 20,
+            total: 0,
+            totalPages: 0,
+          })
+        })
+        .finally(() => setLoading(false))
+    },
+    [normalized]
+  )
 
   useEffect(() => {
     if (!normalized) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset on empty query is intentional
+      setResults([])
+      setPagination({ page: 1, pageSize: 20, total: 0, totalPages: 0 })
+      setError(null)
       return
     }
     runSearch(1, 20)
-  }, [normalized])
-
-  function runSearch(page: number, pageSize: number) {
-    setLoading(true)
-    searchFarmers({ q: normalized, page, pageSize })
-      .then((resp) => {
-        setResults(
-          resp.items.map((item) => ({
-            address: item.address,
-            name: item.name,
-            region: item.region,
-            district: item.district,
-            verificationCount: item.verificationCount,
-          }))
-        )
-        setPagination({
-          page: resp.pagination.page,
-          pageSize: resp.pagination.pageSize,
-          total: resp.pagination.total,
-          totalPages: resp.pagination.totalPages,
-        })
-        setError(null)
-      })
-      .catch((e) => {
-        setError(e instanceof Error ? e.message : "Could not reach the VerdAnt API")
-        setResults([])
-        setPagination({
-          page: 1,
-          pageSize: 20,
-          total: 0,
-          totalPages: 0,
-        })
-      })
-      .finally(() => setLoading(false))
-  }
+  }, [normalized, runSearch])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     const q = query.trim()
     if (!q) return
-    setQuery(q)
-    runSearch(1, 20)
+    setSubmittedQuery(q)
   }
 
   const handlePageChange = (page: number) => {
@@ -118,44 +125,78 @@ export function SearchDiscoveryClient() {
       {loading && <Spinner size="md" label="Searching farmers…" className={styles.spinner} />}
 
       {results.length > 0 && (
-        <div className={styles.resultsGrid}>
-          {results.map((farmer) => (
-            <Card
-              key={farmer.address}
-              elevation={1}
-              className={styles.resultCard}
-              onClick={() => router.push("/farmers/" + farmer.address)}
+        <>
+          <div className={styles.resultsGrid}>
+            {results.map((farmer) => (
+              <Card
+                key={farmer.address}
+                elevation={1}
+                className={styles.resultCard}
+                onClick={() => router.push("/farmers/" + farmer.address)}
+              >
+                <div className={styles.header}>
+                  <StatusPill
+                    tone={farmer.verificationCount > 0 ? "success" : "info"}
+                    label={`Verified (${farmer.verificationCount})`}
+                  />
+                  <span className={styles.farmerId}>
+                    {farmer.address.substring(0, 6)}…{farmer.address.substring(6)}
+                  </span>
+                </div>
+                <div className={styles.meta}>
+                  <p>
+                    <strong>Name:</strong> {farmer.name}
+                  </p>
+                  {farmer.region && (
+                    <p>
+                      <strong>Region:</strong> {farmer.region}
+                    </p>
+                  )}
+                  {farmer.district && (
+                    <p>
+                      <strong>District:</strong> {farmer.district}
+                    </p>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {pagination.totalPages > 1 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginTop: 16,
+                justifyContent: "center",
+              }}
             >
-              <div className={styles.header}>
-                <StatusPill
-                  tone={farmer.verificationCount > 0 ? "success" : "info"}
-                  label={`Verified (${farmer.verificationCount})`}
-                />
-                <span className={styles.farmerId}>
-                  {farmer.address.substring(0, 6)}…{farmer.address.substring(6)}
-                </span>
-              </div>
-              <div className={styles.meta}>
-                <p>
-                  <strong>Name:</strong> {farmer.name}
-                </p>
-                {farmer.region && (
-                  <p>
-                    <strong>Region:</strong> {farmer.region}
-                  </p>
-                )}
-                {farmer.district && (
-                  <p>
-                    <strong>District:</strong> {farmer.district}
-                  </p>
-                )}
-              </div>
-            </Card>
-          ))}
-        </div>
+              <Button
+                variant="outlined"
+                size="sm"
+                disabled={pagination.page <= 1 || loading}
+                onClick={() => handlePageChange(pagination.page - 1)}
+              >
+                Previous
+              </Button>
+              <Text size="body-sm" tone="muted">
+                Page {pagination.page} of {pagination.totalPages} — {pagination.total} farmers
+              </Text>
+              <Button
+                variant="outlined"
+                size="sm"
+                disabled={pagination.page >= pagination.totalPages || loading}
+                onClick={() => handlePageChange(pagination.page + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </>
       )}
 
-      {results.length === 0 && normalized && (
+      {results.length === 0 && normalized && !loading && !error && (
         <Card elevation={1} className={styles.emptyState}>
           <StatusPill tone="info" label="No farmers found" />
           <Text>

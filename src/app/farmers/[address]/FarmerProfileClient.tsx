@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Card } from "@/components/ui"
 import { Heading, Text, StatusPill, Button, Spinner } from "@/components/ui"
 import { getFarmer, registerFarmer } from "@/lib/api/farmers"
@@ -46,7 +46,7 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
     getWalletServerSnapshot
   )
 
-  async function loadFarmer() {
+  const loadFarmer = useCallback(async () => {
     setData((prev) => ({ ...prev, loading: true, error: null }))
     try {
       const farmer = await getFarmer(address)
@@ -54,13 +54,13 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
     } catch (error) {
       setData({ farmer: null, error: error as Error, loading: false })
     }
-  }
+  }, [address])
 
   useEffect(() => {
     // schedule the fetch to avoid synchronous setState in effect (react-hooks v7 lint)
-    const id = setTimeout(loadFarmer, 0)
+    const id = setTimeout(() => void loadFarmer(), 0)
     return () => clearTimeout(id)
-  }, [address])
+  }, [loadFarmer])
 
   const handleRegister = async () => {
     if (walletStatus.state !== "connected") {

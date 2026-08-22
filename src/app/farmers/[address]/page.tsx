@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 import { FarmerProfileClient } from "./FarmerProfileClient"
-import { notFound } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Farmer Profile",
