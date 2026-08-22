@@ -26,8 +26,8 @@ import styles from "./auth-button.module.css"
  * Wallet connect + SEP-40 sign-in control.
  * States:
  * - disconnected -> "Connect Freighter"
- * - connected + signed_out/unknown -> "Sign in with Freighter"
- * - signed_in -> address + sign out
+ * - connected + signed_out/unknown -> wallet address (click to sign in)
+ * - signed_in -> wallet address + sign out
  */
 export function AuthButton() {
   const wallet = useSyncExternalStore<WalletStatus>(
@@ -97,23 +97,77 @@ export function AuthButton() {
     )
   }
 
-  const showInsecureHint = isInsecure && wallet.state === "connected"
-  const isInsecureError = authError !== null && /insecure|ssl|certificate/i.test(authError)
-
-  let button: React.ReactNode
-  if (wallet.state !== "connected") {
-    button = (
-      <Button onClick={handlePrimary} loading={busy}>
-        Connect Freighter
-      </Button>
-    )
-  } else {
-    button = (
-      <Button onClick={handlePrimary} loading={busy}>
-        Sign in with Freighter
-      </Button>
+  if (wallet.state === "connected") {
+    // Show wallet address instead of generic "Sign in" label — clicking will sign in
+    const showInsecureHint = isInsecure
+    const isInsecureError = authError !== null && /insecure|ssl|certificate/i.test(authError)
+    return (
+      <div
+        style={{
+          display: "inline-flex",
+          flexDirection: "column",
+          gap: 8,
+          alignItems: "flex-end",
+          maxWidth: 320,
+        }}
+      >
+        <Button
+          variant="outlined"
+          className={styles.signedIn}
+          onClick={handlePrimary}
+          loading={busy}
+          title={`Sign in with Freighter as ${wallet.address}`}
+        >
+          <span className={styles.address}>{shortAddress(wallet.address)}</span>
+          <span
+            className={styles.dot}
+            aria-hidden="true"
+            style={{ background: "var(--va-warning, #e6a700)" }}
+          />
+        </Button>
+        {showInsecureHint && !authError && (
+          <Text size="body-sm" tone="muted" as="p" style={{ fontSize: "0.75rem", lineHeight: 1.4 }}>
+            Using <code>http://</code> — Freighter blocks sign-in by default. Enable in Freighter →
+            Settings → Security → Advanced → “Allow insecure connections”, or run{" "}
+            <code>npm run dev:https</code>.
+          </Text>
+        )}
+        {authError && (
+          <Card
+            elevation={0}
+            style={{
+              padding: 8,
+              borderColor: isInsecureError ? "var(--va-warning, #e6a700)" : undefined,
+            }}
+          >
+            <div style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+              <StatusPill
+                tone={isInsecureError ? "pending" : "error"}
+                label={isInsecureError ? "HTTPS required" : "Sign-in failed"}
+              />
+            </div>
+            <Text
+              size="body-sm"
+              as="p"
+              style={{ marginTop: 6, fontSize: "0.75rem", lineHeight: 1.4 }}
+            >
+              {authError}
+            </Text>
+          </Card>
+        )}
+      </div>
     )
   }
+
+  // disconnected -> Connect Freighter (with optional insecure/auth error hints)
+  const showInsecureHint = isInsecure
+  const isInsecureError = authError !== null && /insecure|ssl|certificate/i.test(authError)
+
+  const button = (
+    <Button onClick={handlePrimary} loading={busy}>
+      Connect Freighter
+    </Button>
+  )
 
   if (!showInsecureHint && !authError) return button
 

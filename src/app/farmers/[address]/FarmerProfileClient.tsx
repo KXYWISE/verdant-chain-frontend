@@ -176,13 +176,13 @@ export function FarmerProfileClient({ address }: FarmerProfileClientProps) {
 
           <div className={styles.section}>
             <Heading as="h3">Profile</Heading>
-            {farmer.metadata ? (
+            {farmer.metadata?.profile ? (
               <div className={styles.metaGrid}>
                 <div className={styles.metaItem}>
                   <Text as="span" size="label-sm" tone="muted">
                     Name
                   </Text>
-                  <Text as="p">{farmer.metadata.profile.name}</Text>
+                  <Text as="p">{farmer.metadata.profile.name ?? "—"}</Text>
                 </div>
                 {farmer.metadata.profile.region && (
                   <div className={styles.metaItem}>

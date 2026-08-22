@@ -79,11 +79,13 @@ test.describe("wallet connect and SEP-40 sign-in", () => {
     await expect(connect).toBeVisible()
     await connect.click()
 
-    const signIn = header.getByRole("button", { name: "Sign in with Freighter" })
-    await expect(signIn).toBeVisible()
-    await signIn.click()
+    // After connecting, the top button shows the wallet address (click to sign in)
+    const addressBtn = header.getByRole("button", { name: /GABCDE/ })
+    await expect(addressBtn).toBeVisible()
+    await expect(addressBtn).toHaveAttribute("title", /Sign in with Freighter/)
+    await addressBtn.click()
 
-    // After sign-in, should show signed-in identity (short address with sign-out title)
+    // After sign-in, should show signed-in identity (same address but Sign out title)
     await expect(header.getByRole("button", { name: /Sign out/ })).toBeVisible()
     await expect(header.getByText("GABCDE")).toBeVisible()
   })
@@ -92,7 +94,9 @@ test.describe("wallet connect and SEP-40 sign-in", () => {
     await page.goto("/")
 
     await page.getByRole("banner").getByRole("button", { name: "Connect Freighter" }).click()
-    await page.getByRole("banner").getByRole("button", { name: "Sign in with Freighter" }).click()
+    const addressBtn = page.getByRole("banner").getByRole("button", { name: /GABCDE/ })
+    await expect(addressBtn).toBeVisible()
+    await addressBtn.click()
     await expect(page.getByRole("banner").getByRole("button", { name: /Sign out/ })).toBeVisible()
 
     await page
