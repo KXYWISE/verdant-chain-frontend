@@ -91,12 +91,28 @@ export async function signInWithFreighter(): Promise<AuthVerifyResponse> {
   let signature: string
   try {
     const res = await signMessage(message, { address })
-    if (res.error) throw new WalletError("sign_failed", res.error.message)
+    if (res.error) {
+      const msg = res.error.message ?? ""
+      if (/ssl|certificate|not secure|secure/i.test(msg)) {
+        throw new WalletError(
+          "insecure_origin",
+          "Freighter requires HTTPS. For localhost, enable 'Allow insecure connections' in Freighter Settings > Security > Advanced settings, or run dev with HTTPS (npm run dev:https)."
+        )
+      }
+      throw new WalletError("sign_failed", msg)
+    }
     if (!res.signedMessage)
       throw new WalletError("sign_failed", "Freighter did not return a signature")
     signature = toBase64(res.signedMessage)
   } catch (error) {
     if (error instanceof WalletError) throw error
+    const msg = error instanceof Error ? error.message : ""
+    if (/ssl|certificate|not secure|secure/i.test(msg)) {
+      throw new WalletError(
+        "insecure_origin",
+        "Freighter requires HTTPS. For localhost, enable 'Allow insecure connections' in Freighter Settings > Security > Advanced settings, or run dev with HTTPS (npm run dev:https)."
+      )
+    }
     throw new WalletError("sign_failed", "Freighter could not sign the message")
   }
 
